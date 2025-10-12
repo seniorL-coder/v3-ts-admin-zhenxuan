@@ -18,32 +18,32 @@ export const routes = [
         meta: { title: '首页', hidden: false, Icon: 'solar:home-bold' }
       },
       {
-        path:'/jobs',
+        path: '/jobs',
         name: 'Jobs',
         component: () => import('@/views/Jobs/index.vue'),
         meta: { title: '职位列表', hidden: false, Icon: 'solar:home-bold' }
       },
       {
-        path:'/analysis',
+        path: '/analysis',
         name: 'Analysis',
         component: () => import('@/views/Analysis/index.vue'),
         meta: { title: '数据分析', hidden: false, Icon: 'solar:home-bold' }
       },
       {
-        path:'/companies',
+        path: '/companies',
         name: 'Companies',
         component: () => import('@/views/Companies/index.vue'),
         meta: { title: '公司信息', hidden: false, Icon: 'solar:home-bold' }
       },
-     
+
       {
-        path:'/skills',
+        path: '/skills',
         name: 'Skills',
         component: () => import('@/views/Skills/index.vue'),
         meta: { title: '技能词云', hidden: false, Icon: 'solar:home-bold' }
       },
       {
-        path:'/trend',
+        path: '/trend',
         name: 'Trend',
         component: () => import('@/views/Trend/index.vue'),
         meta: { title: '招聘趋势', hidden: false, Icon: 'solar:home-bold' }

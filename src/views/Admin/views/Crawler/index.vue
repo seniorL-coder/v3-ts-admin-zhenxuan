@@ -5,7 +5,7 @@
 <template>
   <div>
     <!-- Your template here -->
-     <h1>爬虫管理页面(定时任务控制)</h1>
+    <h1>爬虫管理页面(定时任务控制)</h1>
   </div>
 </template>
 

@@ -5,7 +5,7 @@
 <template>
   <div>
     <!-- Your template here -->
-     <h1>技能词云页面(热门技术展示)</h1>
+    <h1>技能词云页面(热门技术展示)</h1>
   </div>
 </template>
 

@@ -5,7 +5,7 @@
 <template>
   <div>
     <!-- Your template here -->
-     <h1>管理员登录页面</h1>
+    <h1>管理员登录页面</h1>
   </div>
 </template>
 

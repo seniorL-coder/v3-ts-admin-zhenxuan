@@ -5,8 +5,8 @@
 <template>
   <div>
     <!-- Your template here -->
-     <h1>后台管理页面</h1>
-     <RouterView />
+    <h1>后台管理页面</h1>
+    <RouterView />
   </div>
 </template>
 

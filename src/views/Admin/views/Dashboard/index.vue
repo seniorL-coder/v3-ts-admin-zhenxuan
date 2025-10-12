@@ -5,7 +5,7 @@
 <template>
   <div>
     <!-- Your template here -->
-     <h1>控制台 系统状态</h1>
+    <h1>控制台 系统状态</h1>
   </div>
 </template>
 
