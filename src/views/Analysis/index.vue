@@ -5,7 +5,7 @@
 <template>
   <div>
     <!-- Your template here -->
-    <h1>Spu</h1>
+    <h1>职位数据分析页(筛选 +图表)</h1>
   </div>
 </template>
 

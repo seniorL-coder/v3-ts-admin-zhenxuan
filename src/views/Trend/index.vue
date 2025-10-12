@@ -5,7 +5,7 @@
 <template>
   <div>
     <!-- Your template here -->
-    <h1>商标管理</h1>
+     <h1>招聘趋势分析页 (折线图)</h1>
   </div>
 </template>
 

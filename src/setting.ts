@@ -1,4 +1,4 @@
 export default {
-  title: '小李甄选运营平台',
-  logo: 'https://i.postimg.cc/mrvrhrtp/logo.png'
+  title: '招聘网站职位数据抓取与分析',
+  logo: 'https://i.postimg.cc/8zQstf7S/image.png'
 }

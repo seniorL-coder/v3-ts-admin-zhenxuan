@@ -4,8 +4,7 @@
 
 <template>
   <div>
-    <!-- Your template here -->
-    <h1>属性管理</h1>
+    <h1>职位列表页 (分页 , 搜索 +详情)</h1>
   </div>
 </template>
 

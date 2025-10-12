@@ -9,7 +9,7 @@ const getUserInfo = async () => {
 getUserInfo()
 </script>
 <template>
-  <div class="home">我是home</div>
+  <div class="home">我是home, 数据总览 dashboard (指标 +图表)</div>
   <SvgIcon name="lock" color="skyblue" />
   <el-image
     :src="userStore.userInfo?.checkUser.avatar"

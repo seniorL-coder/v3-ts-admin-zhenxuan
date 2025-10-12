@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import logoInfo from '@/setting'
-
-
 </script>
 
 <template>
   <div class="logo">
     <el-image class="img" :src="logoInfo.logo" alt="logo" />
-    
+
     <h2>{{ logoInfo.title }}</h2>
   </div>
 </template>
