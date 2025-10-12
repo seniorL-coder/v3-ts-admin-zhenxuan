@@ -17,11 +17,12 @@ export default {
 </script>
 
 <template>
-  <el-menu 
-  :default-active="$route.path" 
-  background-color="#efefef" 
-  router 
-  :default-openeds="flattenRoutes(userRoutes).map(item => item.path)">
+  <el-menu
+    :default-active="$route.path"
+    background-color="#efefef"
+    router
+    :default-openeds="flattenRoutes(userRoutes).map((item) => item.path)"
+  >
     <!-- 渲染无嵌套的路由    -->
     <template v-for="item in flattenRoutes(userRoutes)" :key="item.path">
       <el-menu-item

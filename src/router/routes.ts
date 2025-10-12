@@ -21,7 +21,11 @@ export const routes = [
         path: '/jobs',
         name: 'Jobs',
         component: () => import('@/views/Jobs/index.vue'),
-        meta: { title: '职位列表', hidden: false, Icon: 'mdi:briefcase-outline' }
+        meta: {
+          title: '职位列表',
+          hidden: false,
+          Icon: 'mdi:briefcase-outline'
+        }
       },
       {
         path: '/analysis',
@@ -33,7 +37,11 @@ export const routes = [
         path: '/companies',
         name: 'Companies',
         component: () => import('@/views/Companies/index.vue'),
-        meta: { title: '公司信息', hidden: false, Icon: 'mdi:office-building-outline' }
+        meta: {
+          title: '公司信息',
+          hidden: false,
+          Icon: 'mdi:office-building-outline'
+        }
       },
 
       {
@@ -78,13 +86,21 @@ export const routes = [
         path: '/admin/data',
         name: 'AdminData',
         component: () => import('@/views/Admin/views/Data/index.vue'),
-        meta: { title: '数据管理', hidden: false, Icon: 'fluent:data-trending-20-regular' }
+        meta: {
+          title: '数据管理',
+          hidden: false,
+          Icon: 'fluent:data-trending-20-regular'
+        }
       },
       {
         path: '/admin/user',
         name: 'AdminUser',
         component: () => import('@/views/Admin/views/User/index.vue'),
-        meta: { title: '用户管理', hidden: false, Icon: 'mdi:account-group-outline' }
+        meta: {
+          title: '用户管理',
+          hidden: false,
+          Icon: 'mdi:account-group-outline'
+        }
       }
     ]
   },
