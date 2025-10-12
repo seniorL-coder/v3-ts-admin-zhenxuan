@@ -9,7 +9,7 @@ export const routes = [
     path: '/',
     name: 'Home',
     component: () => import('@/views/Layout/index.vue'),
-    meta: { title: '数据总览', hidden: false, Icon: 'solar:home-bold' },
+    meta: { title: '数据总览', hidden: false, Icon: 'uil:database' },
     children: [
       {
         path: '/home',
@@ -21,32 +21,32 @@ export const routes = [
         path: '/jobs',
         name: 'Jobs',
         component: () => import('@/views/Jobs/index.vue'),
-        meta: { title: '职位列表', hidden: false, Icon: 'solar:home-bold' }
+        meta: { title: '职位列表', hidden: false, Icon: 'mdi:briefcase-outline' }
       },
       {
         path: '/analysis',
         name: 'Analysis',
         component: () => import('@/views/Analysis/index.vue'),
-        meta: { title: '数据分析', hidden: false, Icon: 'solar:home-bold' }
+        meta: { title: '数据分析', hidden: false, Icon: 'mdi:chart-bar' }
       },
       {
         path: '/companies',
         name: 'Companies',
         component: () => import('@/views/Companies/index.vue'),
-        meta: { title: '公司信息', hidden: false, Icon: 'solar:home-bold' }
+        meta: { title: '公司信息', hidden: false, Icon: 'mdi:office-building-outline' }
       },
 
       {
         path: '/skills',
         name: 'Skills',
         component: () => import('@/views/Skills/index.vue'),
-        meta: { title: '技能词云', hidden: false, Icon: 'solar:home-bold' }
+        meta: { title: '技能词云', hidden: false, Icon: 'mdi:code-tags' }
       },
       {
         path: '/trend',
         name: 'Trend',
         component: () => import('@/views/Trend/index.vue'),
-        meta: { title: '招聘趋势', hidden: false, Icon: 'solar:home-bold' }
+        meta: { title: '招聘趋势', hidden: false, Icon: 'mdi:chart-line' }
       }
     ]
   },
@@ -66,25 +66,25 @@ export const routes = [
         path: '/admin/dashboard',
         name: 'AdminDashboard',
         component: () => import('@/views/Admin/views/Dashboard/index.vue'),
-        meta: { title: '控制台', hidden: false, Icon: 'solar:home-bold' }
+        meta: { title: '控制台', hidden: false, Icon: 'uil:dashboard' }
       },
       {
         path: '/admin/crawler',
         name: 'AdminCrawler',
         component: () => import('@/views/Admin/views/Crawler/index.vue'),
-        meta: { title: '爬虫管理', hidden: false, Icon: 'solar:home-bold' }
+        meta: { title: '爬虫管理', hidden: false, Icon: 'mdi:spider-web' }
       },
       {
         path: '/admin/data',
         name: 'AdminData',
         component: () => import('@/views/Admin/views/Data/index.vue'),
-        meta: { title: '数据管理', hidden: false, Icon: 'solar:home-bold' }
+        meta: { title: '数据管理', hidden: false, Icon: 'fluent:data-trending-20-regular' }
       },
       {
         path: '/admin/user',
         name: 'AdminUser',
         component: () => import('@/views/Admin/views/User/index.vue'),
-        meta: { title: '用户管理', hidden: false, Icon: 'solar:home-bold' }
+        meta: { title: '用户管理', hidden: false, Icon: 'mdi:account-group-outline' }
       }
     ]
   },
