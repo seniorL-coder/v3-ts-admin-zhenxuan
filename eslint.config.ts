@@ -3,6 +3,7 @@ import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescri
 import pluginVue from 'eslint-plugin-vue'
 import skipFormatting, { ignores } from '@vue/eslint-config-prettier/skip-formatting'
 import { env } from 'node:process'
+import { console } from 'node:inspector/promises'
 
 // To allow more languages other than `ts` in `.vue` files, uncomment the following lines:
 // import { configureVueProject } from '@vue/eslint-config-typescript'
@@ -13,23 +14,27 @@ export default defineConfigWithVueTs(
   {
     name: 'app/files-to-lint',
     files: ['**/*.{ts,mts,tsx,vue}'],
+    languageOptions: {
+      ecmaVersion: 'latest', // 最新版本的 ECMAScript
+      sourceType: 'module',
+      globals: {
+        console: 'readonly', // 允许使用 console
+        process: 'readonly', // 允许使用 process
+      },
+    },
   },
-
   globalIgnores(['**/dist/**', '**/dist-ssr/**', '**/coverage/**']),
 
   pluginVue.configs['flat/essential'],
   vueTsConfigs.recommended,
   skipFormatting,
   {
-
     rules: {
       /* --------- 基础 JS 代码质量 --------- */
       'no-var': 'error',
       'prefer-const': 'warn',
       'no-unused-vars': 'warn',
-      // eslint-disable-next-line no-undef
       'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
-      // eslint-disable-next-line no-undef
       'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
       'no-unexpected-multiline': 'warn',
       'no-multiple-empty-lines': ['warn', { max: 1 }],
@@ -73,7 +78,6 @@ export default defineConfigWithVueTs(
       /* -------- TypeScript 常用 -------- */
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unused-vars': ['warn'],
-    }
-
-  }
+    },
+  },
 )
