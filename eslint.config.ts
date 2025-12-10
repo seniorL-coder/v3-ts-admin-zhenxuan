@@ -1,9 +1,8 @@
 import { globalIgnores } from 'eslint/config'
 import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescript'
 import pluginVue from 'eslint-plugin-vue'
-import skipFormatting, { ignores } from '@vue/eslint-config-prettier/skip-formatting'
-import { env } from 'node:process'
-import { console } from 'node:inspector/promises'
+import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
+
 
 // To allow more languages other than `ts` in `.vue` files, uncomment the following lines:
 // import { configureVueProject } from '@vue/eslint-config-typescript'
@@ -20,6 +19,7 @@ export default defineConfigWithVueTs(
       globals: {
         console: 'readonly', // 允许使用 console
         process: 'readonly', // 允许使用 process
+        ElMessage: 'readonly',
       },
     },
   },
@@ -59,7 +59,7 @@ export default defineConfigWithVueTs(
 
       /* --------- 最实用的逻辑限制 --------- */
       'no-duplicate-imports': 'error',
-      'no-undef': 'error',
+      'no-undef': ['error'],
       'no-unsafe-finally': 'error',
       'no-case-declarations': 'warn',
 
