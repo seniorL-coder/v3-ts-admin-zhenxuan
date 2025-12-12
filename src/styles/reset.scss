@@ -1,12 +1,17 @@
 * {
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
   background-repeat: no-repeat;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 
-body {
+body,
+#app {
   margin: 0;
-  line-height: 1;
+  padding: 0;
+  width: 100%;
+  height: 100vh;
 }
 
 article,
@@ -23,26 +28,9 @@ details {
   display: block;
 }
 
-audio,
-canvas,
-video {
-  display: inline-block;
-}
-
 img {
   display: block;
   border: 0;
-}
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  margin: 0;
-  padding: 0;
-  font-weight: normal;
 }
 
 p {
@@ -50,33 +38,9 @@ p {
   padding: 0;
 }
 
-address,
-cite,
-dfn,
-em,
-var {
-  font-style: normal;
-}
-
 ul,
 ol {
   margin: 0;
   padding: 0;
   list-style-type: none;
-}
-
-a {
-  background-color: transparent;
-  font-size: inherit;
-  color: inherit;
-  text-decoration: none;
-
-  &:active,
-  &:hover {
-    outline: 0;
-  }
-}
-
-:focus {
-  outline: 0;
 }

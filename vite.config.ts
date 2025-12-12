@@ -43,5 +43,14 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
+  server: {
+    proxy: {
+      '/dev-api': {
+        target: 'http://117.72.157.194:10086/admin/acl',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/dev-api/, ''),
+      },
+    },
+  },
 
 })

@@ -1,8 +1,7 @@
 import axios, { type AxiosResponse } from 'axios'
-// import { ElMessage } from 'element-plus'
 import type { ApiResponse } from '@/types/apiResponse'
 export const request = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL: import.meta.env.VITE_APP_BASE_API,
   timeout: 10000,
   withCredentials: true,
 })
@@ -20,10 +19,10 @@ request.interceptors.request.use(
 request.interceptors.response.use(
   <T>(res: AxiosResponse<T>): T => {
     // 响应状态码判断
-    if ((res.data as ApiResponse<unknown>).code === 1) {
+    if ((res.data as ApiResponse<unknown>).code === 200) {
       return res.data
     }
-    ElMessage.error((res.data as ApiResponse<unknown>).msg || '请求失败')
+    ElMessage.error((res.data as ApiResponse<unknown>).message || '请求失败')
     // 其他情况也要返回Promise.reject以避免TypeScript错误
     throw res.data
   },
