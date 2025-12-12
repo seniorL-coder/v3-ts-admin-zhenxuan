@@ -3,7 +3,6 @@ import { defineConfigWithVueTs, vueTsConfigs } from '@vue/eslint-config-typescri
 import pluginVue from 'eslint-plugin-vue'
 import skipFormatting from '@vue/eslint-config-prettier/skip-formatting'
 
-
 // To allow more languages other than `ts` in `.vue` files, uncomment the following lines:
 // import { configureVueProject } from '@vue/eslint-config-typescript'
 // configureVueProject({ scriptLangs: ['ts', 'tsx'] })
@@ -20,6 +19,8 @@ export default defineConfigWithVueTs(
         console: 'readonly', // 允许使用 console
         process: 'readonly', // 允许使用 process
         ElMessage: 'readonly',
+        setTimeout: 'readonly',
+        ElNotification: 'readonly',
       },
     },
   },

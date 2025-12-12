@@ -1,5 +1,7 @@
 import axios, { type AxiosResponse } from 'axios'
 import type { ApiResponse } from '@/types/apiResponse'
+import { useUserStore } from '@/stores/user.ts'
+import { storeToRefs } from 'pinia'
 export const request = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_API,
   timeout: 10000,
@@ -8,6 +10,10 @@ export const request = axios.create({
 
 request.interceptors.request.use(
   (config) => {
+    const { token } = storeToRefs(useUserStore())
+    if (token) {
+      config.headers.token = token.value
+    }
     return config
   },
   (error) => {

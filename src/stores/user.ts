@@ -1,18 +1,31 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { fetchLoginAPI } from '@/api/user'
-import type { loginParamsType } from '@/types/user/login'
+import { fetchLoginAPI, fetchUserInfoAPI } from '@/api/user'
+import type { loginParamsType, UserInfoType } from '@/types/user'
 
-export const useUserStore = defineStore('user', () => {
-  const token = ref('')
+export const useUserStore = defineStore(
+  'user',
+  () => {
+    const token = ref('')
+    const userInfo = ref<UserInfoType>({} as UserInfoType)
 
-  const login = async (userInfo: loginParamsType) => {
-    const res = await fetchLoginAPI(userInfo)
-    token.value = res.data
-  }
+    const login = async (userInfo: loginParamsType) => {
+      const res = await fetchLoginAPI(userInfo)
+      token.value = res.data
+    }
+    const getUserInfo = async () => {
+      const res = await fetchUserInfoAPI()
+      userInfo.value = res.data
+    }
 
-  return {
-    token,
-    login,
-  }
-})
+    return {
+      token,
+      userInfo,
+      login,
+      getUserInfo,
+    }
+  },
+  {
+    persist: true,
+  },
+)

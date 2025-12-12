@@ -1,5 +1,5 @@
 import { request } from '@/utils/request.ts'
-import type { loginParamsType } from '@/types/user/login'
+import type { loginParamsType, UserInfoType } from '@/types/user'
 import type { ApiResponse } from '@/types/apiResponse'
 
 export const fetchLoginAPI = (data: loginParamsType) => {
@@ -7,5 +7,16 @@ export const fetchLoginAPI = (data: loginParamsType) => {
     method: 'POST',
     url: '/index/login',
     data,
+  })
+}
+
+/**
+ * index/info
+ * 获取用户信息
+ */
+export const fetchUserInfoAPI = () => {
+  return request<unknown, ApiResponse<UserInfoType>>({
+    method: 'GET',
+    url: '/index/info',
   })
 }
