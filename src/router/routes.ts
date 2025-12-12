@@ -3,7 +3,7 @@ import type { RouteRecordRaw } from 'vue-router'
 export const constantRoutes: RouteRecordRaw[] = [
   {
     path: '/',
-    component: () => import('@/views/Home/index.vue'),
+    component: () => import('@/views/Layout/index.vue'),
     name: 'layout',
   },
   {

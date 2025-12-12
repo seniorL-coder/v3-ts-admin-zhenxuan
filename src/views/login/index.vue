@@ -52,6 +52,7 @@ const rules = {
 }
 
 const onSubmit = async () => {
+  await formEl.value?.validate() // 验证表单
   await userStore.login(formData.value)
   ElMessage.success('登录成功!☺️')
   setTimeout(() => router.replace('/'), 1000)
