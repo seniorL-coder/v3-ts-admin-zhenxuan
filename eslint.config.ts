@@ -21,6 +21,7 @@ export default defineConfigWithVueTs(
         ElMessage: 'readonly',
         setTimeout: 'readonly',
         ElNotification: 'readonly',
+        ElMessageBox: 'readonly',
       },
     },
   },

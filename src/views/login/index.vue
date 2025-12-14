@@ -1,12 +1,11 @@
 <script setup lang="ts">
-import bg_img from '@/assets/images/background-img.svg'
-import { MotionComponent } from '@vueuse/motion'
 import { ref, useTemplateRef } from 'vue'
 import type { loginParamsType } from '@/types/user'
 import type { FormInstance } from 'element-plus'
 import { useUserStore } from '@/stores/user.ts'
 import { useRouter } from 'vue-router'
 import { User, Lock } from '@element-plus/icons-vue'
+import bg_img from '@/assets/images/background-img.svg'
 
 const router = useRouter()
 
@@ -15,23 +14,6 @@ const userStore = useUserStore()
 /**
  * 左侧滑入 → 刹车 → 轻微回弹 → 停止
  */
-const cardMotion = {
-  initial: {
-    x: -1500, // 初始在右侧
-    opacity: 0,
-  },
-  enter: {
-    x: 0,
-    opacity: 1,
-    transition: {
-      duration: 0.6,
-      easing: 'ease-out',
-      type: 'spring', // 弹性刹车
-      stiffness: 300, // 越大越明显
-      damping: 15, // 阻尼越小，弹性越明显
-    },
-  },
-}
 
 const formData = ref<loginParamsType>({
   username: import.meta.env.DEV ? 'admin' : '',
@@ -63,12 +45,14 @@ const onReset = () => {
 </script>
 
 <template>
-  <div class="w-full h-full overflow-hidden">
+  <div class="w-full h-full overflow-hidden login-container">
     <el-row class="h-full bg-blue-400" align="middle">
-      <el-col :span="12" :xs="{ span: 0 }"><el-image :src="bg_img" /></el-col>
+      <el-col :span="12" :xs="{ span: 0 }">
+        <el-image class="w-full h-full" :src="bg_img" fit="fill" />
+      </el-col>
       <el-col :span="9" :xs="{ span: 24 }" :offset="3" class="form_container">
-        <motion-component v-motion="cardMotion">
-          <el-card class="w-2/3 mx-auto">
+        <Transition name="scale-fade" appear>
+          <el-card class="w-2/3 mx-auto perspective-distant">
             <template #header>
               <h1 class="text-3xl">欢迎来到</h1>
               <div>Vue3 + TypeScript Admin</div>
@@ -85,7 +69,7 @@ const onReset = () => {
                   v-model="formData.username"
                   :prefix-icon="User"
                   placeholder="请输入用户名"
-                ></el-input>
+                />
               </el-form-item>
               <el-form-item prop="password" label="密码: ">
                 <el-input
@@ -94,7 +78,7 @@ const onReset = () => {
                   placeholder="请输入密码"
                   type="password"
                   :show-password="true"
-                ></el-input>
+                />
               </el-form-item>
             </el-form>
             <el-row>
@@ -105,7 +89,7 @@ const onReset = () => {
                 <el-button @click="onReset" type="warning">重置</el-button>
               </el-col>
             </el-row>
-          </el-card></motion-component
+          </el-card></Transition
         >
       </el-col>
     </el-row>
@@ -116,4 +100,22 @@ const onReset = () => {
 .form_container
   background-image: url("/public/favicon.ico")
   background-position: top right
+
+/* 进入前 & 离开后 */
+.scale-fade-enter-from,
+.scale-fade-leave-to
+  opacity: 0
+  transform: scale(0)
+
+
+/* 进入中 & 离开中 */
+.scale-fade-enter-active,
+.scale-fade-leave-active
+  transition: opacity 0.4s ease-out, transform 0.4s ease-out
+
+/* 进入完成 & 离开前 */
+.scale-fade-enter-to,
+.scale-fade-leave-from
+  opacity: 1
+  transform:  scale(1)
 </style>

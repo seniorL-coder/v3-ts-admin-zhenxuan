@@ -11,7 +11,7 @@ const getUserInfo = async () => {
     type: 'success',
   })
 }
-getUserInfo()
+// getUserInfo()
 </script>
 <template>
   <h1>Home</h1>

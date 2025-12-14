@@ -11,6 +11,8 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 import tailwindcss from '@tailwindcss/vite'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 
+import ElementPlus from 'unplugin-element-plus/vite'
+
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
@@ -21,9 +23,11 @@ export default defineConfig({
       resolvers: [ElementPlusResolver()],
     }),
     Components({
-      resolvers: [ElementPlusResolver()],
+      resolvers: [ElementPlusResolver({ importStyle: 'sass' })],
     }),
-
+    ElementPlus({
+      useSource: true,
+    }),
     createSvgIconsPlugin({
       // Specify the icon folder to be cached
       iconDirs: [fileURLToPath(new URL('src/assets/icons', import.meta.url))],
@@ -34,7 +38,10 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        additionalData: '@use "@/styles/variable.scss" as *;',
+        // 自动导入定制化样式文件进行样式覆盖
+        additionalData: `
+          @use "@/styles/element/index.scss" as *;
+        `,
       },
     },
   },
@@ -52,5 +59,4 @@ export default defineConfig({
       },
     },
   },
-
 })

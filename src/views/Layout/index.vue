@@ -1,41 +1,55 @@
 <script setup lang="ts">
-import { MotionComponent } from '@vueuse/motion'
 import Logo from '@/views/Layout/components/Logo/index.vue'
+import { useUserStore } from '@/stores/user.ts'
+import MenuComponent from '@/views/Layout/components/Menu/index.vue'
+import PageHeaderCom from '@/views/Layout/components/PageHeader/index.vue'
+import { useLayoutSeetingStore } from '@/stores/setting.ts'
+import { nextTick, ref, watch } from 'vue'
 
-const cardMotion = {
-  initial: {
-    x: '100%', // 初始在右侧
-    opacity: 0,
-  },
-  enter: {
-    x: 0,
-    opacity: 1,
-    transition: {
-      duration: 0.6,
-      easing: 'ease-out',
-      type: 'spring', // 弹性刹车
-      stiffness: 300, // 越大越明显
-      damping: 15, // 阻尼越小，弹性越明显
-    },
-  },
+const userStore = useUserStore()
+const layoutSettingStore = useLayoutSeetingStore()
+const refreshFlag = ref(true)
+const getdepts = () => {
+  console.log('getdepts')
 }
+getdepts()
+watch(
+  () => layoutSettingStore.refresh,
+  () => {
+    console.log('refreshFlag')
+    refreshFlag.value = false
+    // nextTick 的回调会在 当前响应式更新完成后、DOM 更新完成后 执行。
+    // 也就是说：当前轮响应式更新完成后立即执行，不等到下一次响应更新。
+    nextTick(() => {
+      refreshFlag.value = true
+    })
+  },
+)
 </script>
 
 <template>
   <el-container>
-    <el-aside class="aside-nav">
+    <el-aside :width="layoutSettingStore.isCollapse ? '64px' : '260px'" class="aside-nav">
       <Logo />
+
       <el-scrollbar class="scrollBar">
-        <p v-for="i in 100">{{ i }}</p>
+        <el-menu :collapse="layoutSettingStore.isCollapse" router :default-active="$route.path">
+          <MenuComponent :menuList="userStore.menuRoutes" />
+        </el-menu>
       </el-scrollbar>
     </el-aside>
+
     <el-container>
-      <el-header><el-card>头部</el-card></el-header>
-      <el-main>
+      <el-header
+        ><el-card><PageHeaderCom /></el-card
+      ></el-header>
+      <el-main class="mt-4!">
         <el-card>
-          <motion-component v-motion="cardMotion">
-            <div class="content bg-blue-400">main</div>
-          </motion-component>
+          <Transition name="slide-fade" appear>
+            <RouterView v-slot="{ Component }">
+              <component :is="Component" v-if="refreshFlag" />
+            </RouterView>
+          </Transition>
         </el-card>
       </el-main>
     </el-container>
@@ -43,12 +57,52 @@ const cardMotion = {
 </template>
 
 <style scoped lang="sass">
-@use "@/styles/variable.scss" as *
+@use '@/styles/element/index.scss' as *
 .aside-nav
   height: 100vh
-  width: $base-menu-width
-  background-color: $base-menu-background
-  color: $color
+  background-color: $base-menu-bg-color
+  color: $base-title-color
+  transition: width .3s ease-out
+
 .scrollBar
   height: calc(100vh - $base-menu-logo-height)
+.menu-list
+  background-color: $base-menu-bg-color
+  color: $base-title-color
+  border-right: none
+.el-menu
+  border-right: none
+:deep(.is-active)
+  background-color: $base-menu-active-bg-color
+  color: $base-menu-active-text-color
+:deep(.el-card__body)
+  overflow: hidden
+
+
+/* ---------- 进入动画 ---------- */
+.slide-fade-enter-from
+  opacity: 0
+  transform: translateX(-100px) // 从左轻微滑入
+
+.slide-fade-enter-active
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease-out
+
+.slide-fade-enter-to
+  opacity: 1
+  transform: translateX(0)
+
+/* ---------- 离开动画 ---------- */
+.slide-fade-leave-from
+  opacity: 1
+  position: absolute
+  transform: translateX(0) // 保持原位
+
+.slide-fade-leave-active
+  position: absolute
+  transition: opacity 2s ease-in
+
+.slide-fade-leave-to
+  opacity: 0
+  position: absolute
+  transform: translateX(0) // 不位移，直接淡出
 </style>
