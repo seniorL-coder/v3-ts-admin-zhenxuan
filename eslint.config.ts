@@ -22,6 +22,7 @@ export default defineConfigWithVueTs(
         setTimeout: 'readonly',
         ElNotification: 'readonly',
         ElMessageBox: 'readonly',
+        document: 'readonly',
       },
     },
   },

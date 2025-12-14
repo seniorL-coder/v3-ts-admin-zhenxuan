@@ -30,7 +30,7 @@ export const useUserStore = defineStore(
       getUserInfo,
     }
   },
-  // {
-  //   persist: true,
-  // },
+  {
+    persist: true,
+  },
 )

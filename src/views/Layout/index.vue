@@ -16,7 +16,6 @@ getdepts()
 watch(
   () => layoutSettingStore.refresh,
   () => {
-    console.log('refreshFlag')
     refreshFlag.value = false
     // nextTick 的回调会在 当前响应式更新完成后、DOM 更新完成后 执行。
     // 也就是说：当前轮响应式更新完成后立即执行，不等到下一次响应更新。
@@ -75,14 +74,14 @@ watch(
 :deep(.is-active)
   background-color: $base-menu-active-bg-color
   color: $base-menu-active-text-color
+:deep(.el-main)
+  height: calc(100vh - 16px - 60px)
 :deep(.el-card__body)
   overflow: hidden
-
-
 /* ---------- 进入动画 ---------- */
 .slide-fade-enter-from
   opacity: 0
-  transform: translateX(-100px) // 从左轻微滑入
+  transform: translateX(-100%) // 从左滑入
 
 .slide-fade-enter-active
   transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease-out
@@ -99,7 +98,7 @@ watch(
 
 .slide-fade-leave-active
   position: absolute
-  transition: opacity 2s ease-in
+  transition: opacity 0.5s ease-in
 
 .slide-fade-leave-to
   opacity: 0

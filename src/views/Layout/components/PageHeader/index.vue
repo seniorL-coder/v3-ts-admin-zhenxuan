@@ -18,6 +18,17 @@ const handleCollapse = () => {
 const handleRefresh = () => {
   layoutSettingStore.refreshPage()
 }
+
+// 全屏
+const handleFullScreen = () => {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen()
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen()
+    }
+  }
+}
 </script>
 
 <template>
@@ -42,7 +53,7 @@ const handleRefresh = () => {
     <template #extra>
       <div class="flex items-center">
         <el-button size="small" icon="Refresh" @click="handleRefresh" />
-        <el-button size="small" icon="FullScreen" />
+        <el-button size="small" icon="FullScreen" @click="handleFullScreen" />
         <el-button size="small" icon="Setting" />
         <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
         <el-dropdown @command="handleCommand">
