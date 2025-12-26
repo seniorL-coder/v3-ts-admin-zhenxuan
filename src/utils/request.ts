@@ -3,6 +3,8 @@ import type { ApiResponse } from '@/types/apiResponse'
 import { useUserStore } from '@/stores/user.ts'
 import { storeToRefs } from 'pinia'
 import router from '@/router'
+import Nprogress from 'nprogress'
+
 export const request = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_API,
   timeout: 10000,
@@ -11,6 +13,7 @@ export const request = axios.create({
 
 request.interceptors.request.use(
   (config) => {
+    Nprogress.start()
     const { token } = storeToRefs(useUserStore())
     if (token.value) {
       config.headers.token = token.value
@@ -26,7 +29,7 @@ request.interceptors.request.use(
 request.interceptors.response.use(
   <T>(res: AxiosResponse<T>): T => {
     const response = res.data as unknown as ApiResponse<unknown>
-
+    Nprogress.done()
     switch (response.code) {
       case 200:
         // 请求成功
