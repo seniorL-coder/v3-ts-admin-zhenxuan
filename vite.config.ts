@@ -12,11 +12,39 @@ import tailwindcss from '@tailwindcss/vite'
 import { createSvgIconsPlugin } from 'vite-plugin-svg-icons'
 
 import ElementPlus from 'unplugin-element-plus/vite'
+// import { viteStaticCopy } from 'vite-plugin-static-copy'
+//
+// const cesiumSource = 'node_modules/cesium/Build/Cesium'
+
+// const cesiumBaseUrl = 'cesiumStatic'
 
 // https://vite.dev/config/
 export default defineConfig({
+  // define: {
+  //   CESIUM_BASE_URL: JSON.stringify(`/${cesiumBaseUrl}`),
+  // },
   plugins: [
     vue(),
+    // viteStaticCopy({
+    //   targets: [
+    //     {
+    //       src: `${cesiumSource}/Assets`,
+    //       dest: cesiumBaseUrl,
+    //     },
+    //     {
+    //       src: `${cesiumSource}/Widgets`,
+    //       dest: cesiumBaseUrl,
+    //     },
+    //     {
+    //       src: `${cesiumSource}/Workers`,
+    //       dest: cesiumBaseUrl,
+    //     },
+    //     {
+    //       src: `${cesiumSource}/ThirdParty`,
+    //       dest: cesiumBaseUrl,
+    //     },
+    //   ],
+    // }),
     vueDevTools(),
     tailwindcss(),
     AutoImport({
@@ -51,6 +79,7 @@ export default defineConfig({
     },
   },
   server: {
+    port:8888,
     proxy: {
       '/dev-api': {
         target: 'http://117.72.157.194:10086/admin/acl',

@@ -1,6 +1,9 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/user.ts'
 import { getTimePeriod } from '@/utils/getTimePeriodUtlis.ts'
+// import 'cesium/Build/Cesium/Widgets/widgets.css'
+
+// import FlyCesium from '@/views/Home/components/flyCesium.vue'
 const userStore = useUserStore()
 
 const getUserInfo = async () => {
@@ -14,7 +17,12 @@ const getUserInfo = async () => {
 getUserInfo()
 </script>
 <template>
-  <h1>Home</h1>
+  <iframe class="iframe" src="http://117.72.157.194:81/" width="100%" />
 </template>
 
-<style scoped lang="sass"></style>
+<style scoped lang="sass">
+.iframe
+  height: calc(100vh - 150px)
+.cesium-widget-credits
+  display: none !important
+</style>

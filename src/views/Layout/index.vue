@@ -84,7 +84,7 @@ watch(
   transform: translateX(-100%) // 从左滑入
 
 .slide-fade-enter-active
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease-out
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.4s ease-out
 
 .slide-fade-enter-to
   opacity: 1
@@ -98,7 +98,7 @@ watch(
 
 .slide-fade-leave-active
   position: absolute
-  transition: opacity 0.5s ease-in
+  transition: opacity 1s ease-in
 
 .slide-fade-leave-to
   opacity: 0

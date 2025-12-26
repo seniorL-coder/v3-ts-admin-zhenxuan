@@ -3,7 +3,6 @@ defineOptions({
   name: 'menu-component',
 })
 const { menuList } = defineProps(['menuList'])
-console.log(menuList)
 </script>
 
 <template>

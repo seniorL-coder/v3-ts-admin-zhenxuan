@@ -20,3 +20,14 @@ export const fetchUserInfoAPI = () => {
     url: '/index/info',
   })
 }
+
+/**
+ * index/logout
+ * 登出
+ */
+export const fetchLogoutAPI = () => {
+  return request<unknown, ApiResponse<string>>({
+    method: 'POST',
+    url: '/index/logout',
+  })
+}

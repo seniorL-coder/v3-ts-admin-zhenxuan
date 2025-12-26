@@ -3,11 +3,12 @@ import { ref, useTemplateRef } from 'vue'
 import type { loginParamsType } from '@/types/user'
 import type { FormInstance } from 'element-plus'
 import { useUserStore } from '@/stores/user.ts'
-import { useRouter } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { User, Lock } from '@element-plus/icons-vue'
 import bg_img from '@/assets/images/background-img.svg'
 
 const router = useRouter()
+const route = useRoute()
 
 const userStore = useUserStore()
 
@@ -37,7 +38,8 @@ const onSubmit = async () => {
   await formEl.value?.validate() // 验证表单
   await userStore.login(formData.value)
   ElMessage.success('登录成功!☺️')
-  setTimeout(() => router.replace('/'), 1000)
+  const redirect = route.query.redirect as string
+  setTimeout(() => router.replace({ path: redirect || '/' }), 1000)
 }
 const onReset = () => {
   formEl.value?.resetFields()
@@ -106,7 +108,6 @@ const onReset = () => {
 .scale-fade-leave-to
   opacity: 0
   transform: scale(0)
-
 
 /* 进入中 & 离开中 */
 .scale-fade-enter-active,

@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
-import { fetchLoginAPI, fetchUserInfoAPI } from '@/api/user'
+import { fetchLoginAPI, fetchLogoutAPI, fetchUserInfoAPI } from '@/api/user'
 import type { loginParamsType, UserInfoType } from '@/types/user'
 import type { RouteRecordRaw } from 'vue-router'
 import { constantRoutes } from '@/router/routes'
@@ -21,6 +21,12 @@ export const useUserStore = defineStore(
       const res = await fetchUserInfoAPI()
       userInfo.value = res.data
     }
+    // 删除token
+    const logout = async () => {
+      await fetchLogoutAPI()
+      token.value = ''
+      userInfo.value = {}
+    }
 
     return {
       token,
@@ -28,6 +34,7 @@ export const useUserStore = defineStore(
       menuRoutes,
       login,
       getUserInfo,
+      logout,
     }
   },
   {

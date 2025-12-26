@@ -12,7 +12,7 @@ export const request = axios.create({
 request.interceptors.request.use(
   (config) => {
     const { token } = storeToRefs(useUserStore())
-    if (token) {
+    if (token.value) {
       config.headers.token = token.value
     }
     return config
@@ -30,6 +30,7 @@ request.interceptors.response.use(
     switch (response.code) {
       case 200:
         // 请求成功
+
         return res.data
       case 206:
       case 207:
