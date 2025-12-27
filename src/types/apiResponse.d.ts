@@ -4,3 +4,11 @@ export interface ApiResponse<T> {
   message: string
   ok: boolean
 }
+
+export interface ApiResponsePageLimit<T> {
+  total: number
+  size: number
+  current: number
+  searchCount: boolean
+  records: T[]
+}

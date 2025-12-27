@@ -1,20 +1,23 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/user.ts'
 import { getTimePeriod } from '@/utils/getTimePeriodUtlis.ts'
+import { watch } from 'vue'
 // import 'cesium/Build/Cesium/Widgets/widgets.css'
 
 // import FlyCesium from '@/views/Home/components/flyCesium.vue'
 const userStore = useUserStore()
+watch(
+  () => userStore.userInfo.name,
+  (name) => {
+    if (!name) return
 
-const getUserInfo = async () => {
-  await userStore.getUserInfo()
-  ElNotification({
-    title: userStore.userInfo.name,
-    message: `欢迎回来! ${getTimePeriod(Date.now())}好!`,
-    type: 'success',
-  })
-}
-getUserInfo()
+    ElNotification({
+      title: name,
+      message: `欢迎回来！${getTimePeriod(Date.now())}好！`,
+      type: 'success',
+    })
+  },
+)
 </script>
 <template>
   <iframe class="iframe" src="http://117.72.157.194:81/" width="100%" />

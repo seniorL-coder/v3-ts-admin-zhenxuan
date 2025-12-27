@@ -39,7 +39,7 @@ const onSubmit = async () => {
   await userStore.login(formData.value)
   ElMessage.success('登录成功!☺️')
   const redirect = route.query.redirect as string
-  setTimeout(() => router.replace({ path: redirect || '/' }), 1000)
+  setTimeout(() => router.replace({ path: redirect || '/' }), 500)
 }
 const onReset = () => {
   formEl.value?.resetFields()

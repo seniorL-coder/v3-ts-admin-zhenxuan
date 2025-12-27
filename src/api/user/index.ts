@@ -3,9 +3,9 @@ import type { loginParamsType, UserInfoType } from '@/types/user'
 import type { ApiResponse } from '@/types/apiResponse'
 
 export const fetchLoginAPI = (data: loginParamsType) => {
-  return request<loginParamsType, ApiResponse<string>>({
+  return request<string>({
     method: 'POST',
-    url: '/index/login',
+    url: '/acl/index/login',
     data,
   })
 }
@@ -15,9 +15,9 @@ export const fetchLoginAPI = (data: loginParamsType) => {
  * 获取用户信息
  */
 export const fetchUserInfoAPI = () => {
-  return request<unknown, ApiResponse<UserInfoType>>({
+  return request<UserInfoType>({
     method: 'GET',
-    url: '/index/info',
+    url: '/acl/index/info',
   })
 }
 
@@ -28,6 +28,6 @@ export const fetchUserInfoAPI = () => {
 export const fetchLogoutAPI = () => {
   return request<unknown, ApiResponse<string>>({
     method: 'POST',
-    url: '/index/logout',
+    url: '/acl/index/logout',
   })
 }

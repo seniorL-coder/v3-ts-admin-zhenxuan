@@ -27,19 +27,21 @@ request.interceptors.request.use(
 
 // 响应拦截器
 request.interceptors.response.use(
-  <T>(res: AxiosResponse<T>): T => {
-    const response = res.data as unknown as ApiResponse<unknown>
+  async <T>(res: AxiosResponse<ApiResponse<T>>): Promise<T> => {
+    const userStore = useUserStore()
+    const response = res.data
     Nprogress.done()
     switch (response.code) {
       case 200:
         // 请求成功
 
-        return res.data
+        return response as T
       case 206:
       case 207:
         // 登录失效或无权限
         ElMessage.error('登录失效，请重新登录')
-        router.push('/login')
+        await userStore.logout()
+        await router.push('/login')
         throw response
       case 201:
         ElMessage.error(response.message || '请求参数错误')
@@ -65,11 +67,13 @@ request.interceptors.response.use(
     }
   },
   async (error) => {
+    const userStore = useUserStore()
     // 网络或服务器错误
     const status = error?.response?.status
     if (status === 401) {
       ElMessage.error('登录失效，请重新登录')
-      router.push('/login')
+      await userStore.logout()
+      await router.push('/login')
       return Promise.reject(error)
     }
     ElMessage.error(error?.message || '网络错误')

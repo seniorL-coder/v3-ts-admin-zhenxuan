@@ -11,11 +11,12 @@ export const useUserStore = defineStore(
     const token = ref('')
     const userInfo = ref<UserInfoType>({} as UserInfoType)
     const menuRoutes = ref<RouteRecordRaw[]>([] as RouteRecordRaw[])
-    menuRoutes.value = constantRoutes // 默认静态路由
+    // menuRoutes.value = constantRoutes // 默认静态路由
 
     const login = async (userInfo: loginParamsType) => {
       const res = await fetchLoginAPI(userInfo)
       token.value = res.data
+      menuRoutes.value = constantRoutes
     }
     const getUserInfo = async () => {
       const res = await fetchUserInfoAPI()
@@ -26,6 +27,7 @@ export const useUserStore = defineStore(
       await fetchLogoutAPI()
       token.value = ''
       userInfo.value = {}
+      menuRoutes.value = []
     }
 
     return {

@@ -16,7 +16,7 @@ const handleCommand = async (command: string) => {
     await userStore.logout()
     const redirect = route.fullPath
     router.replace({ path: '/login', query: { redirect: redirect } })
-    ElMessage.success('退出登录成功')
+    ElMessage.success('退出成功')
   }
 }
 // 折叠切换
@@ -64,10 +64,10 @@ const handleFullScreen = () => {
         <el-button size="small" icon="Refresh" @click="handleRefresh" />
         <el-button size="small" icon="FullScreen" @click="handleFullScreen" />
         <el-button size="small" icon="Setting" />
-        <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png" />
+        <el-avatar :src="userStore.userInfo.avatar" class="mr-2! ml-2!" />
         <el-dropdown @command="handleCommand">
           <span>
-            admin
+            {{ userStore.userInfo.name }}
             <el-icon class="el-icon--right">
               <arrow-down />
             </el-icon>

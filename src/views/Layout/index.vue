@@ -7,12 +7,13 @@ import { useLayoutSeetingStore } from '@/stores/setting.ts'
 import { nextTick, ref, watch } from 'vue'
 
 const userStore = useUserStore()
+const getUserInfo = async () => {
+  await userStore.getUserInfo()
+}
+getUserInfo()
 const layoutSettingStore = useLayoutSeetingStore()
 const refreshFlag = ref(true)
-const getdepts = () => {
-  console.log('getdepts')
-}
-getdepts()
+
 watch(
   () => layoutSettingStore.refresh,
   () => {

@@ -81,10 +81,10 @@ export default defineConfig({
   server: {
     port:8888,
     proxy: {
-      '/dev-api': {
-        target: 'http://117.72.157.194:10086/admin/acl',
+      '/api': {
+        target: 'http://117.72.157.194:10086/admin/',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/dev-api/, ''),
+        rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },
   },
