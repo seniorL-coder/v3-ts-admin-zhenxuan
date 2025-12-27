@@ -31,14 +31,18 @@ const handleEditor = (row: ModelTrademark) => {
 }
 const handleDelete = async (id: number) => {
   await fetchRemoveTrademark(id)
-  handlePageChange(pagnation.value.page, pagnation.value.pageSize)
+  // 如果当前页只剩 1 条，并且不是第一页，页码回退
+  if (trademarkList.value.length === 1 && pagnation.value.page > 1) {
+    pagnation.value.page--
+  }
+  await handlePageChange(pagnation.value.page, pagnation.value.pageSize)
   ElMessage.success('删除成功')
 }
 
 const handleSubmitUpdate = async (trademark: ModelTrademark) => {
   dialogVisible.value = false
   await fetchUpdateTrademark(trademark)
-  handlePageChange(pagnation.value.page, pagnation.value.pageSize)
+  await handlePageChange(pagnation.value.page, pagnation.value.pageSize)
   ElMessage.success('更新成功')
 }
 </script>
