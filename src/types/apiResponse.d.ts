@@ -10,5 +10,6 @@ export interface ApiResponsePageLimit<T> {
   size: number
   current: number
   searchCount: boolean
+  pages: number
   records: T[]
 }

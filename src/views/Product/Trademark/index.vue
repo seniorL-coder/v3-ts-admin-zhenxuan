@@ -1,12 +1,18 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { fetchRemoveTrademark, fetchTrademarkList, fetchUpdateTrademark } from '@/api/product'
+import {
+  fetchAddTrademark,
+  fetchRemoveTrademark,
+  fetchTrademarkList,
+  fetchUpdateTrademark,
+} from '@/api/product'
 import type { ModelTrademark } from '@/types/trademark'
 import UpdataTrademark from '@/views/Product/Trademark/components/UpdataTrademark.vue'
-
+const dialogMode = ref<'edit' | 'add'>('add')
 const pagnation = ref({
   page: 1,
   pageSize: 3,
+  pages: 0,
   pageSizes: [3, 5, 10, 15, 20],
   total: 0,
 })
@@ -19,6 +25,8 @@ const handlePageChange = async (page: number, limit: number) => {
   pagnation.value.total = res.data.total
   pagnation.value.page = page
   pagnation.value.pageSize = limit
+  pagnation.value.pages = res.data.pages
+
   trademarkList.value.forEach((item) => {
     item.logoUrl = `http://117.72.157.194:10086${item.logoUrl!.substring(4)}`
   })
@@ -26,7 +34,13 @@ const handlePageChange = async (page: number, limit: number) => {
 handlePageChange(pagnation.value.page, pagnation.value.pageSize)
 
 const handleEditor = (row: ModelTrademark) => {
+  dialogMode.value = 'edit'
   currEditorTrademark.value = row
+  dialogVisible.value = true
+}
+const handleAdd = () => {
+  dialogMode.value = 'add'
+  currEditorTrademark.value = {}
   dialogVisible.value = true
 }
 const handleDelete = async (id: number) => {
@@ -45,10 +59,16 @@ const handleSubmitUpdate = async (trademark: ModelTrademark) => {
   await handlePageChange(pagnation.value.page, pagnation.value.pageSize)
   ElMessage.success('更新成功')
 }
+const handleSubmitAdd = async (trademark: ModelTrademark) => {
+  await fetchAddTrademark(trademark)
+  await handlePageChange(pagnation.value.pages, pagnation.value.pageSize)
+  ElMessage.success('添加成功')
+  dialogVisible.value = false
+}
 </script>
 
 <template>
-  <el-button type="primary" class="!mb-2" icon="Plus">添加品牌</el-button>
+  <el-button type="primary" class="!mb-2" icon="Plus" @click="handleAdd">添加品牌</el-button>
   <el-table border stripe :data="trademarkList">
     <el-table-column align="center" width="80px" label="序号">
       <template #default="scope">
@@ -98,10 +118,15 @@ const handleSubmitUpdate = async (trademark: ModelTrademark) => {
     </el-col>
   </el-row>
   <el-dialog width="500px" title="添加品牌" v-model="dialogVisible">
+    <template #title>
+      <span>{{ dialogMode === 'edit' ? '编辑品牌' : '添加品牌' }}</span>
+    </template>
     <UpdataTrademark
       :currEditTrademark="currEditorTrademark"
+      :mode="dialogMode"
       @cancel="dialogVisible = false"
       @update="handleSubmitUpdate"
+      @add="handleSubmitAdd"
     />
   </el-dialog>
 </template>

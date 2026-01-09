@@ -35,3 +35,15 @@ export const fetchRemoveTrademark = (id: number) => {
     url: `/product/baseTrademark/remove/${id}`,
   })
 }
+
+/**
+ * 新增品牌
+ * /product/baseTrademark/save
+ */
+export const fetchAddTrademark = (data: ModelTrademark) => {
+  return request<null>({
+    method: 'POST',
+    url: '/product/baseTrademark/save',
+    data,
+  })
+}
