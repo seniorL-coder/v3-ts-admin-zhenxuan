@@ -72,6 +72,7 @@ const handlePageChange = (page: number, limit: number) => {
     <Category />
   </el-card>
   <el-card class="!mt-4">
+    <el-button type="primary" @click="handleAdd" icon="Plus"> </el-button>
     <el-table border stripe :data="attrList">
       <el-table-column label="序号" width="80" align="center">
         <template #default="scope">
@@ -101,7 +102,11 @@ const handlePageChange = (page: number, limit: number) => {
       layout=" prev, pager, jumper, next,->,sizes, total"
     />
   </el-card>
-  <dialogCom :mode="dialogMode" :currEditAttr="currEditAttr" v-model="dialogVisible" />
+  <dialogCom
+    :mode="dialogMode"
+    :currEditAttr="currEditAttr"
+    v-model:dialogVisible="dialogVisible"
+  />
 </template>
 
 <style scoped lang="sass"></style>
