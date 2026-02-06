@@ -3,7 +3,7 @@
 const emits = defineEmits(['updateCategoryIds'])
 // 获取一级分类
 import { fetchCategory1, fetchCategory2, fetchCategory3 } from '@/api/attr'
-import { nextTick, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import type { ModelGetCategory } from '@/types/attr'
 const category1List = ref<ModelGetCategory[]>([])
 const category2List = ref<ModelGetCategory[]>([])
@@ -38,9 +38,7 @@ const handleCategory2Change = async (id: number) => {
 watch(
   () => [category1Id.value, category2Id.value, category3Id.value],
   ([c1, c2, c3]) => {
-    if (c1 && c2 && c3) {
-      emits('updateCategoryIds', [c1, c2, c3])
-    }
+    emits('updateCategoryIds', [c1, c2, c3])
   },
 )
 </script>

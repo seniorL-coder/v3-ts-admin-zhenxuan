@@ -32,15 +32,17 @@ const pagination = ref({
   total: 0,
 })
 const attrList = ref()
-
+// 判断分类id是否合法
+const isValidIds = (ids: number[]) => ids.length === 3 && ids.every((id) => Number.isFinite(id))
 const handlePageChange = (page: number, limit: number) => {
   console.log(page, limit)
 }
 const handleUpdateCategoryIds = async (ids: number[]) => {
   categoryIds.value = ids
-  console.log(ids)
-  const res = await fetchAttrInfoList(ids[0]!, ids[1]!, ids[2]!)
-  attrList.value = res.data
+  if (isValidIds(ids)) {
+    const res = await fetchAttrInfoList(ids[0]!, ids[1]!, ids[2]!)
+    attrList.value = res.data
+  }
 }
 </script>
 
@@ -50,7 +52,14 @@ const handleUpdateCategoryIds = async (ids: number[]) => {
     <Category @updateCategoryIds="handleUpdateCategoryIds" />
   </el-card>
   <el-card class="!mt-4">
-    <el-button type="primary" @click="handleAdd" icon="Plus"> </el-button>
+    <el-button
+      class="mb-2!"
+      type="primary"
+      @click="handleAdd"
+      icon="Plus"
+      :disabled="!isValidIds(categoryIds)"
+      >添加属性</el-button
+    >
     <el-table border stripe :data="attrList">
       <el-table-column label="序号" width="80" align="center">
         <template #default="scope">
@@ -61,7 +70,7 @@ const handleUpdateCategoryIds = async (ids: number[]) => {
       <el-table-column label="属性值" prop="attrValueList" align="center">
         <template #default="{ row }">
           <el-tag
-            class="!ml-2"
+            class="ml-2!"
             v-for="(item, index) in row.attrValueList"
             :key="item"
             :type="index % 2 == 0 ? 'primary' : 'warning'"
@@ -81,15 +90,15 @@ const handleUpdateCategoryIds = async (ids: number[]) => {
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-      class="!mt-2"
-      @change="handlePageChange"
-      v-model:current-page="pagination.page"
-      v-model:page-size="pagination.pageSize"
-      :page-sizes="pagination.pageSizes"
-      :total="pagination.total"
-      layout=" prev, pager, jumper, next,->,sizes, total"
-    />
+    <!--    <el-pagination-->
+    <!--      class="!mt-2"-->
+    <!--      @change="handlePageChange"-->
+    <!--      v-model:current-page="pagination.page"-->
+    <!--      v-model:page-size="pagination.pageSize"-->
+    <!--      :page-sizes="pagination.pageSizes"-->
+    <!--      :total="pagination.total"-->
+    <!--      layout=" prev, pager, jumper, next,->,sizes, total"-->
+    <!--    />-->
   </el-card>
   <dialogCom
     :mode="dialogMode"

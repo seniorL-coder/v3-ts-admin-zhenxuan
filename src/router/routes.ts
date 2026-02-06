@@ -14,7 +14,7 @@ export const constantRoutes: RouteRecordRaw[] = [
     },
     children: [
       {
-        path: '/home',
+        path: 'home',
         name: 'home',
         component: () => import('@/views/Home/index.vue'),
         meta: {
@@ -37,7 +37,7 @@ export const constantRoutes: RouteRecordRaw[] = [
     },
     children: [
       {
-        path: '/acl/role',
+        path: 'role',
         name: 'Role',
         component: () => import('@/views/Acl/Role/index.vue'),
         meta: {
@@ -47,7 +47,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         },
       },
       {
-        path: '/acl/permission',
+        path: 'permission',
         name: 'Permission',
         component: () => import('@/views/Acl/Permission/index.vue'),
         meta: {
@@ -57,7 +57,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         },
       },
       {
-        path: '/acl/user',
+        path: 'user',
         name: 'User',
         component: () => import('@/views/Acl/User/index.vue'),
         meta: {
@@ -80,7 +80,7 @@ export const constantRoutes: RouteRecordRaw[] = [
     },
     children: [
       {
-        path: '/product/trademark',
+        path: 'trademark',
         name: 'Trademark',
         component: () => import('@/views/Product/Trademark/index.vue'),
         meta: {
@@ -90,7 +90,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         },
       },
       {
-        path: '/product/attr',
+        path: 'attr',
         name: 'Attr',
         component: () => import('@/views/Product/Attr/index.vue'),
         meta: {
@@ -100,7 +100,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         },
       },
       {
-        path: '/product/spu',
+        path: 'spu',
         name: 'Spu',
         component: () => import('@/views/Product/SPU/index.vue'),
         meta: {
@@ -110,7 +110,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         },
       },
       {
-        path: '/product/sku',
+        path: 'sku',
         name: 'Sku',
         component: () => import('@/views/Product/SKU/index.vue'),
         meta: {
@@ -152,7 +152,7 @@ export const constantRoutes: RouteRecordRaw[] = [
   {
     path: '/:pathMatch(.*)*',
     redirect: '/404',
-    name: '404',
+    name: 'CatchAll',
     meta: {
       title: 'pathMatch',
       hidden: true,
