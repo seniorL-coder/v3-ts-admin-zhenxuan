@@ -1,7 +1,9 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import dialogCom from './components/dialogCom.vue'
-
+import { fetchAttrInfoList } from '@/api/attr'
+// 定义接收三个分类id的参数
+const categoryIds = ref<number[]>([])
 const dialogMode = ref<'add' | 'edit'>('add')
 const currEditAttr = ref({
   id: 0,
@@ -29,47 +31,23 @@ const pagination = ref({
   pageSizes: [3, 5, 10, 15, 20],
   total: 0,
 })
-const attrList = ref([
-  {
-    id: 1,
-    attrName: '颜色',
-    attrValue: '红色,蓝色,绿色',
-  },
-  {
-    id: 2,
-    attrName: '尺寸',
-    attrValue: '100cm,200cm,300cm',
-  },
-  {
-    id: 3,
-    attrName: '材质',
-    attrValue: '棉,涤纶,尼龙',
-  },
-  {
-    id: 4,
-    attrName: '品牌',
-    attrValue: '耐克,阿迪达斯,匡威',
-  },
-  {
-    id: 5,
-    attrName: '型号',
-    attrValue: '1000,2000,3000',
-  },
-  {
-    id: 6,
-    attrName: '价格',
-    attrValue: '100,200,300',
-  },
-])
+const attrList = ref()
 
 const handlePageChange = (page: number, limit: number) => {
   console.log(page, limit)
+}
+const handleUpdateCategoryIds = async (ids: number[]) => {
+  categoryIds.value = ids
+  console.log(ids)
+  const res = await fetchAttrInfoList(ids[0]!, ids[1]!, ids[2]!)
+  attrList.value = res.data
 }
 </script>
 
 <template>
   <el-card>
-    <Category />
+    <!--  自定义事件, 用于接收 子组件传来的 categoryIds   -->
+    <Category @updateCategoryIds="handleUpdateCategoryIds" />
   </el-card>
   <el-card class="!mt-4">
     <el-button type="primary" @click="handleAdd" icon="Plus"> </el-button>
@@ -80,7 +58,13 @@ const handlePageChange = (page: number, limit: number) => {
         </template>
       </el-table-column>
       <el-table-column label="属性名称" width="160" prop="attrName" align="center" />
-      <el-table-column label="属性值" prop="attrValue" align="center" />
+      <el-table-column label="属性值" prop="attrValueList" align="center">
+        <template #default="{ row }">
+          <el-tag class="!ml-2" v-for="item in row.attrValueList" :key="item">
+            {{ item.valueName }}
+          </el-tag>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" width="200" align="center">
         <template #default="{ row }">
           <el-button type="primary" icon="Edit" size="small" @click="handleEditor(row)"
