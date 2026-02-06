@@ -5,24 +5,32 @@ const emits = defineEmits(['updateCategoryIds'])
 import { fetchCategory1, fetchCategory2, fetchCategory3 } from '@/api/attr'
 import { nextTick, ref, watch } from 'vue'
 import type { ModelGetCategory } from '@/types/attr'
-const category1List = ref<ModelGetCategory[]>()
+const category1List = ref<ModelGetCategory[]>([])
+const category2List = ref<ModelGetCategory[]>([])
+const category3List = ref<ModelGetCategory[]>([])
+
 const category1Id = ref<number | null>(null)
+const category2Id = ref<number | null>(null)
+const category3Id = ref<number | null>(null)
+
 const getCategory1 = async () => {
   const res = await fetchCategory1()
   category1List.value = res.data
 }
 getCategory1()
 // 获取二级分类
-const category2List = ref<ModelGetCategory[]>()
-const category2Id = ref<number | null>(null)
 const handleCategory1Change = async (id: number) => {
+  category2List.value = []
+  category2Id.value = null
+  category3List.value = []
+  category3Id.value = null
   const res = await fetchCategory2(id)
   category2List.value = res.data
 }
 // 获取三级分类
-const category3List = ref<ModelGetCategory[]>()
-const category3Id = ref<number | null>(null)
-const handleCategory3Change = async (id: number) => {
+const handleCategory2Change = async (id: number) => {
+  category3List.value = []
+  category3Id.value = null
   const res = await fetchCategory3(id)
   category3List.value = res.data
 }
@@ -59,7 +67,7 @@ watch(
         class="!w-60"
         placeholder="请选择二级分类"
         v-model="category2Id"
-        @change="handleCategory3Change"
+        @change="handleCategory2Change"
       >
         <el-option
           v-for="item in category2List"

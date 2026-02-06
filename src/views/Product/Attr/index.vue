@@ -26,7 +26,7 @@ const handleDelete = (id: number) => {
 }
 const pagination = ref({
   page: 1,
-  pageSize: 3,
+  pageSize: 5,
   pages: 0,
   pageSizes: [3, 5, 10, 15, 20],
   total: 0,
@@ -60,7 +60,12 @@ const handleUpdateCategoryIds = async (ids: number[]) => {
       <el-table-column label="属性名称" width="160" prop="attrName" align="center" />
       <el-table-column label="属性值" prop="attrValueList" align="center">
         <template #default="{ row }">
-          <el-tag class="!ml-2" v-for="item in row.attrValueList" :key="item">
+          <el-tag
+            class="!ml-2"
+            v-for="(item, index) in row.attrValueList"
+            :key="item"
+            :type="index % 2 == 0 ? 'primary' : 'warning'"
+          >
             {{ item.valueName }}
           </el-tag>
         </template>
