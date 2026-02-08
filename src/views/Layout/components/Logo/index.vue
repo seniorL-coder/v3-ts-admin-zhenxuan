@@ -8,6 +8,7 @@ const layoutSettingStore = useLayoutSeetingStore()
   <div class="logo flex items-center justify-center">
     <el-image
       fit="cover"
+      class="rounded-full"
       :class="{ 'w-10': layoutSettingStore.isCollapse, 'w-15': !layoutSettingStore.isCollapse }"
       :src="LogoConfig.logo"
       alt="logo"
