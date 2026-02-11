@@ -95,14 +95,10 @@ const removeAttrValue = (index: number) => {
   form.value.attrValues.splice(index, 1)
 }
 
-const editAttrValue = (item: any) => {
-  console.log('编辑:', item)
-}
 const formRef = ref()
 const handleSubmit = () => {
   formRef.value.validate(async (valid: boolean) => {
     if (!valid) return
-    console.log(form)
     // attrName属性名称
     // attrValueList属性值列表，格式为[{id: number, valueName: string, attrId: number}]
     await saveAttrInfo({
@@ -135,9 +131,12 @@ const handleSubmit = () => {
       <!-- 属性值列表 -->
       <el-form-item label="属性值" prop="attrValues">
         <div v-for="(item, index) in form.attrValues" :key="item.id" class="attr-item">
-          <el-input v-model="item.valueName" placeholder="请输入属性值" class="input" />
-
-          <el-button size="small" icon="Edit" type="primary" circle @click="editAttrValue(item)" />
+          <el-input
+            :disabled="!form.attrName.trim()"
+            v-model="item.valueName"
+            placeholder="请输入属性值"
+            class="input"
+          />
 
           <el-button
             size="small"

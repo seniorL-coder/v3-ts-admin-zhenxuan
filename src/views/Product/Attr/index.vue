@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
 import dialogCom from './components/dialogCom.vue'
-import { fetchAttrInfoList } from '@/api/attr'
+import { deleteAttr, fetchAttrInfoList } from '@/api/attr'
 import type { ModelAttrInfo } from '@/types/attr'
 // 定义接收三个分类id的参数
 const categoryIds = ref<number[]>([])
@@ -20,9 +20,9 @@ const handleAdd = () => {
   dialogVisible.value = true
 }
 const handleDelete = async (id: number) => {
-  console.log(id)
-
+  await deleteAttr(id)
   await handleUpdateCategoryIds(categoryIds.value)
+  ElMessage.success('删除成功')
 }
 // 监听dialogVisible的变化 如果disable == false 隐藏状态, 则重新拉去 attrInfoList
 watch(dialogVisible, async (val) => {
@@ -43,9 +43,9 @@ const pagination = ref({
 const attrList = ref()
 // 判断分类id是否合法
 const isValidIds = (ids: number[]) => ids.length === 3 && ids.every((id) => Number.isFinite(id))
-const handlePageChange = (page: number, limit: number) => {
-  console.log(page, limit)
-}
+// const handlePageChange = (page: number, limit: number) => {
+//   console.log(page, limit)
+// }
 const handleUpdateCategoryIds = async (ids: number[]) => {
   categoryIds.value = ids
   if (isValidIds(ids)) {

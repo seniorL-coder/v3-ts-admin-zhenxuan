@@ -58,3 +58,11 @@ export const saveAttrInfo = (data: AttrAddAndEditInfoType) => {
     data,
   })
 }
+// 删除基础属性接口
+// DELETE / admin / product / deleteAttr / { attrId }
+export const deleteAttr = (attrId: number) => {
+  return request({
+    method: 'DELETE',
+    url: '/product/deleteAttr/' + attrId,
+  })
+}
