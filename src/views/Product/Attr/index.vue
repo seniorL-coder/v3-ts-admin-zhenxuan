@@ -2,28 +2,37 @@
 import { ref, watch } from 'vue'
 import dialogCom from './components/dialogCom.vue'
 import { fetchAttrInfoList } from '@/api/attr'
+import type { ModelAttrInfo } from '@/types/attr'
 // 定义接收三个分类id的参数
 const categoryIds = ref<number[]>([])
 const dialogMode = ref<'add' | 'edit'>('add')
-const currEditAttr = ref({
-  id: 0,
-  attrName: '',
-  attrValue: '',
-})
+const currEditAttr = ref<ModelAttrInfo>({} as ModelAttrInfo)
 const dialogVisible = ref(false)
-const handleEditor = (row: { id: number; attrName: string; attrValue: string }) => {
+const handleEditor = (row: ModelAttrInfo) => {
   dialogMode.value = 'edit'
   currEditAttr.value = row
   dialogVisible.value = true
 }
+
 const handleAdd = () => {
   dialogMode.value = 'add'
-  currEditAttr.value = {} as { id: number; attrName: string; attrValue: string }
+  currEditAttr.value = {} as ModelAttrInfo
   dialogVisible.value = true
 }
-const handleDelete = (id: number) => {
+const handleDelete = async (id: number) => {
   console.log(id)
+
+  await handleUpdateCategoryIds(categoryIds.value)
 }
+// 监听dialogVisible的变化 如果disable == false 隐藏状态, 则重新拉去 attrInfoList
+watch(dialogVisible, async (val) => {
+  if (!val) {
+    // 对话框隐藏时，重新拉取 attrInfoList
+    if (isValidIds(categoryIds.value)) {
+      await handleUpdateCategoryIds(categoryIds.value)
+    }
+  }
+})
 const pagination = ref({
   page: 1,
   pageSize: 5,
@@ -104,6 +113,8 @@ const handleUpdateCategoryIds = async (ids: number[]) => {
     :mode="dialogMode"
     :currEditAttr="currEditAttr"
     v-model:dialogVisible="dialogVisible"
+    :categoryId="categoryIds[2]"
+    :categoryLevel="categoryIds.length"
   />
 </template>
 

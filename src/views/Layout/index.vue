@@ -33,7 +33,7 @@ watch(
       <Logo />
 
       <el-scrollbar class="scrollBar">
-        <el-menu :collapse="layoutSettingStore.isCollapse" router :default-active="$route.path">
+        <el-menu :collapse="layoutSettingStore.isCollapse" :default-active="$route.path">
           <MenuComponent :menuList="userStore.menuRoutes" />
         </el-menu>
       </el-scrollbar>

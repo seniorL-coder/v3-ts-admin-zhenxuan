@@ -21,11 +21,11 @@ const currEditorTrademark = ref({} as ModelTrademark)
 const trademarkList = ref([] as ModelTrademark[])
 const handlePageChange = async (page: number, limit: number) => {
   const res = await fetchTrademarkList({ page, limit })
-  trademarkList.value = res.data.records
-  pagnation.value.total = res.data.total
+  trademarkList.value = res.data.records!
+  pagnation.value.total = res.data.total!
   pagnation.value.page = page
   pagnation.value.pageSize = limit
-  pagnation.value.pages = res.data.pages
+  pagnation.value.pages = res.data.pages!
 
   trademarkList.value.forEach((item) => {
     item.logoUrl = `http://117.72.157.194:10086${item.logoUrl!.substring(4)}`

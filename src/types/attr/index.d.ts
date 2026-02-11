@@ -21,7 +21,53 @@ export interface ModelAttrInfo {
  * SimpleDateFormat.SimpleDateFormat
  */
 interface attrValueListType {
-  id: number
+  id?: number
   valueName: string
   attrId: number
+}
+
+/**
+ * 添加或者修改已有的属性类型
+ */
+export interface AttrAddAndEditInfoType {
+  /**
+   * 属性名称
+   */
+  attrName: string
+  /**
+   * 属性值列表
+   */
+  attrValueList: ModelAttrValue[]
+  /**
+   * 三级分类ID
+   */
+  categoryId: number
+  /**
+   * 分类级别
+   */
+  categoryLevel: number
+  createTime?: SimpleDateFormatSimpleDateFormat
+  ID?: number
+  /**
+   * 属性ID
+   */
+  id?: number
+  updateTime?: SimpleDateFormatSimpleDateFormat
+  [property: string]: any
+}
+
+/**
+ * model.AttrValue
+ */
+export interface ModelAttrValue {
+  attrId?: number
+  id?: number
+  valueName: string
+}
+
+/**
+ * SimpleDateFormat.SimpleDateFormat
+ */
+export interface SimpleDateFormatSimpleDateFormat {
+  'time.Time'?: string
 }

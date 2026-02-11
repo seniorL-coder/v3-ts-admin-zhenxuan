@@ -1,4 +1,4 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
 import { constantRoutes } from '@/router/routes.ts'
 import { useUserStore } from '@/stores/user'
 

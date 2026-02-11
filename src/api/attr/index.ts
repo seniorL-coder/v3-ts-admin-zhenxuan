@@ -1,5 +1,5 @@
 import { request } from '@/utils/request.ts'
-import type { ModelAttrInfo, ModelGetCategory } from '@/types/attr'
+import type { AttrAddAndEditInfoType, ModelAttrInfo, ModelGetCategory } from '@/types/attr'
 
 /**
  * 获取一级分类接口
@@ -44,5 +44,17 @@ export const fetchAttrInfoList = (
   return request<ModelAttrInfo[]>({
     method: 'GET',
     url: `/product/attrInfoList/${category1Id}/${category2Id}/${category3Id}`,
+  })
+}
+
+/**
+ * 添加或者修改已有的属性的接口
+ * @param data
+ */
+export const saveAttrInfo = (data: AttrAddAndEditInfoType) => {
+  return request({
+    method: 'POST',
+    url: '/product/saveAttrInfo',
+    data,
   })
 }
