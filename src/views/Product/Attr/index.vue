@@ -113,7 +113,7 @@ const handleUpdateCategoryIds = async (ids: number[]) => {
     :mode="dialogMode"
     :currEditAttr="currEditAttr"
     v-model:dialogVisible="dialogVisible"
-    :categoryId="categoryIds[2]"
+    :categoryId="categoryIds[2]!"
     :categoryLevel="categoryIds.length"
   />
 </template>
