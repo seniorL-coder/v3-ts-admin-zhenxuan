@@ -26,6 +26,7 @@ watch(dialogVisible, (val) => {
         // 假设 currEditAttr 里的属性值字段也是类似的结构，如果不是则需要 map 转换
         attrValues: props.currEditAttr.attrValueList.map((item) => ({
           ...item,
+          disabled: true,
         })),
       }
     } else {
@@ -33,7 +34,7 @@ watch(dialogVisible, (val) => {
       dialogTitle.value = '添加属性'
       form.value = {
         attrName: '',
-        attrValues: [{ id: Date.now(), valueName: '' }],
+        attrValues: [],
       }
     }
 
@@ -51,6 +52,7 @@ const rules: FormRules = {
 
   attrValues: [
     {
+      required: true,
       validator: (_, value, callback) => {
         if (!value || value.length === 0) {
           callback(new Error('请至少添加一个属性值'))
@@ -81,13 +83,14 @@ const rules: FormRules = {
 
 const form = ref<{ attrName: string; attrValues: ModelAttrValue[] }>({
   attrName: '',
-  attrValues: [{ id: Date.now(), valueName: '' }],
+  attrValues: [],
 })
 
 const addAttrValue = () => {
   form.value.attrValues.push({
     id: Date.now(),
     valueName: '',
+    disabled: false,
   })
 }
 
@@ -123,19 +126,26 @@ const handleSubmit = () => {
 
       <!-- 添加按钮 -->
       <el-form-item>
-        <el-button type="primary" :disabled="!form.attrName.trim()" @click="addAttrValue">
+        <el-button
+          v-if="!form.attrValues.length"
+          type="primary"
+          :disabled="!form.attrName.trim()"
+          @click="addAttrValue"
+        >
           添加属性值
         </el-button>
       </el-form-item>
 
       <!-- 属性值列表 -->
-      <el-form-item label="属性值" prop="attrValues">
+      <el-form-item label="属性值" prop="attrValues" v-if="form.attrValues.length > 0">
         <div v-for="(item, index) in form.attrValues" :key="item.id" class="attr-item">
           <el-input
-            :disabled="!form.attrName.trim()"
+            :placeholder="`请输入属性值${index + 1}`"
+            :readonly="item.disabled"
+            @click="item.disabled = false"
+            @blur="item.disabled = true"
             v-model="item.valueName"
-            placeholder="请输入属性值"
-            class="input"
+            :class="{ 'is-locked': item.disabled, input: true }"
           />
 
           <el-button
@@ -147,6 +157,14 @@ const handleSubmit = () => {
             v-if="form.attrValues.length > 1"
           />
         </div>
+        <el-button
+          class="mb-2! ml-2!"
+          icon="Plus"
+          size="small"
+          type="primary"
+          @click="addAttrValue"
+          circle
+        />
       </el-form-item>
     </el-form>
 
@@ -166,6 +184,17 @@ const handleSubmit = () => {
 
 .input {
   width: 300px;
-  margin-right: 10px;
+  margin-left: 13px;
+}
+/* 1. 修改输入框容器的背景和边框 */
+.input.is-locked :deep(.el-input__wrapper) {
+  background-color: #f5f7fa !important; /* 强制背景色 */
+  box-shadow: none !important; /* 去掉 Element Plus 默认的投影边框 */
+}
+
+/* 2. 修改内部真正 input 标签的文字颜色和鼠标样式 */
+.input.is-locked :deep(.el-input__inner) {
+  color: #c0c4cc !important;
+  cursor: not-allowed;
 }
 </style>

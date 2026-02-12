@@ -62,6 +62,10 @@ export interface AttrAddAndEditInfoType {
 export interface ModelAttrValue {
   attrId?: number
   id?: number
+  /**
+   * 是否禁用输入框, 自定义属性字段
+   */
+  disabled?: boolean
   valueName: string
 }
 
