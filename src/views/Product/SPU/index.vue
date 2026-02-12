@@ -5,11 +5,12 @@ import { ref } from 'vue'
 import type { ResponseSpuList } from '@/types/SPU'
 const spuList = ref<ResponseSpuList>({})
 const category3Id = ref<number>(0)
+const flag = ref<boolean>(false) // 是否显示添加SPU按钮
 const pagination = ref({
   page: 1,
-  pageSize: 2,
+  pageSize: 3,
   pages: 0,
-  pageSizes: [3, 5, 10, 15, 20],
+  pageSizes: [3, 5, 10, 15],
   total: 0,
 })
 // 获取SPU分页列表
@@ -24,16 +25,48 @@ const getSPUList = async (page: number, limit: number, category3Id: number) => {
 }
 
 const handleUpdateCategoryIds = (categoryIds: number[]) => {
-  const flag = categoryIds.map((item) => !!item).every((item) => item)
-  if (flag) {
+  flag.value = categoryIds.map((item) => !!item).every((item) => item)
+  if (flag.value) {
     category3Id.value = categoryIds[2]!
-    getSPUList(1, 2, category3Id.value)
+    getSPUList(1, pagination.value.pageSize, category3Id.value)
   }
 }
-
-const handlePageChange = async (page: number) => {
-  console.log(page)
-  await getSPUList(page, pagination.value.pageSize, category3Id.value)
+const handlePageChange = async (page: number, pageSize: number) => {
+  await getSPUList(page, pageSize, category3Id.value)
+}
+/**
+ * 删除SPU
+ * @param row
+ */
+const handleDeleteSPU = (row: any) => {
+  console.log('删除SPU', row)
+}
+/**
+ * 编辑SPU
+ * @param row
+ */
+const handleEditSPU = (row: any) => {
+  console.log('编辑SPU', row)
+}
+/**
+ * 添加SPU
+ */
+const handleAddSPU = () => {
+  console.log('添加SPU')
+}
+/**
+ * 查看已有SKU
+ * @param row
+ */
+const handleViewSKUs = (row: any) => {
+  console.log('查看已有SKU', row)
+}
+/**
+ * 添加SKU
+ * @param row
+ */
+const handleAddSKU = (row: any) => {
+  console.log('添加SKU', row)
 }
 </script>
 
@@ -42,18 +75,47 @@ const handlePageChange = async (page: number) => {
     <Category @updateCategoryIds="handleUpdateCategoryIds" />
   </el-card>
   <el-card>
+    <div class="d-flex mb-2!">
+      <el-button :disabled="!flag" icon="Plus" type="primary" @click="handleAddSPU"
+        >添加SPU</el-button
+      >
+    </div>
     <el-table :data="spuList.records" border stripe>
-      <el-table-column label="序号">
+      <el-table-column label="序号" width="50px" align="center">
         <template #default="scope">
           {{ (pagination.page - 1) * pagination.pageSize + scope.$index + 1 }}
         </template>
       </el-table-column>
-      <el-table-column label="SPU名称" prop="spuName" />
-      <el-table-column label="SPU描述" prop="description" />
-      <el-table-column label="操作">
-        <template #default>
-          <el-button type="primary" size="small">编辑</el-button>
-          <el-button type="danger" size="small">删除</el-button>
+      <el-table-column label="SPU名称" width="150px" align="center" prop="spuName" />
+      <el-table-column label="SPU描述" align="center" prop="description" />
+      <el-table-column label="操作" align="center" width="250px">
+        <template #default="{ row }">
+          <el-button
+            type="primary"
+            icon="Plus"
+            size="small"
+            @click="handleAddSKU(row)"
+            title="添加SKU"
+          />
+          <el-button
+            type="success"
+            icon="View"
+            size="small"
+            @click="handleViewSKUs(row)"
+            title="查看已有SKU"
+          />
+          <el-button
+            type="primary"
+            icon="Edit"
+            size="small"
+            @click="handleEditSPU(row)"
+            title="编辑SPU"
+          />
+          <el-popconfirm title="确定要删除吗？" @confirm="handleDeleteSPU(row)">
+            <template #reference>
+              <el-button type="danger" icon="Delete" size="small" title="删除SPU" />
+            </template>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
