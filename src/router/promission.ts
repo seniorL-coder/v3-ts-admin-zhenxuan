@@ -6,7 +6,6 @@ import 'nprogress/nprogress.css'
 import Setting from '@/settings.ts'
 router.beforeEach((to) => {
   const userStore = useUserStore()
-  console.log(to)
   document.title = `${Setting.title} - ${to.meta.title ?? ''}`
   Nprogress.start()
 

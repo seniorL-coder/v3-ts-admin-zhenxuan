@@ -47,7 +47,7 @@ watch(
   <el-form :inline="true">
     <el-form-item label="一级分类">
       <el-select
-        class="!w-60"
+        class="w-60!"
         placeholder="请选择一级分类"
         v-model="category1Id"
         @change="handleCategory1Change"
@@ -62,7 +62,7 @@ watch(
     </el-form-item>
     <el-form-item label="二级分类">
       <el-select
-        class="!w-60"
+        class="w-60!"
         placeholder="请选择二级分类"
         v-model="category2Id"
         @change="handleCategory2Change"
@@ -76,7 +76,7 @@ watch(
       </el-select>
     </el-form-item>
     <el-form-item label="三级分类">
-      <el-select class="!w-60" placeholder="请选择三级分类" v-model="category3Id">
+      <el-select class="w-60!" placeholder="请选择三级分类" v-model="category3Id">
         <el-option
           v-for="item in category3List"
           :key="item.id"
