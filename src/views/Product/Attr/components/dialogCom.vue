@@ -104,6 +104,10 @@ const handleSubmit = () => {
     if (!valid) return
     // attrName属性名称
     // attrValueList属性值列表，格式为[{id: number, valueName: string, attrId: number}]
+    if (form.value.attrValues.length === 0) {
+      ElMessage.error('请至少添加一个属性值')
+      return
+    }
     await saveAttrInfo({
       attrName: form.value.attrName,
       categoryId: props.currEditAttr.categoryId || props.categoryId,
