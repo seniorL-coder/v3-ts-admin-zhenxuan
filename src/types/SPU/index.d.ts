@@ -75,3 +75,61 @@ export interface ModelSaleAttrValue {
   updateTime?: SimpleDateFormatSimpleDateFormat
   [property: string]: any
 }
+
+/**
+ * model.SpuImage
+ */
+export interface ModelSpuImage {
+  createTime?: SimpleDateFormatSimpleDateFormat
+  ID?: number
+  id?: number
+  imgName?: string
+  imgUrl?: string
+  spuId?: number
+  updateTime?: SimpleDateFormatSimpleDateFormat
+  [property: string]: any
+}
+
+/**
+ * model.SaleAttr 所有销售列表
+ */
+export interface ModelSaleAttr {
+  createTime?: SimpleDateFormatSimpleDateFormat
+  ID?: number
+  /**
+   * 销售属性ID
+   */
+  id?: number
+  /**
+   * 销售属性名称
+   */
+  name?: string
+  updateTime?: SimpleDateFormatSimpleDateFormat
+  [property: string]: any
+}
+
+/**
+ * model.SpuSaleAttr 商品销售属性列表
+ */
+export interface ModelSpuSaleAttr {
+  baseSaleAttrId?: number
+  id?: number
+  saleAttrName?: string
+  spuId?: number
+  spuSaleAttrValueList?: ModelSaleAttrValue[]
+  [property: string]: any
+}
+
+/**
+ * model.SaleAttrValue
+ */
+export interface ModelSaleAttrValue {
+  baseSaleAttrId?: number
+  createTime?: SimpleDateFormatSimpleDateFormat
+  ID?: number
+  id?: number
+  saleAttrValueName?: string
+  spuId?: number
+  updateTime?: SimpleDateFormatSimpleDateFormat
+  [property: string]: any
+}

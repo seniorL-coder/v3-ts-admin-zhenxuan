@@ -6,6 +6,7 @@ import { useUserStore } from '@/stores/user.ts'
 import { useRouter, useRoute } from 'vue-router'
 import { User, Lock } from '@element-plus/icons-vue'
 import bg_img from '@/assets/images/login_left-BVCCvqZF.png'
+import settings from '@/settings.ts'
 
 const router = useRouter()
 const route = useRoute()
@@ -56,8 +57,10 @@ const onReset = () => {
         <Transition name="scale-fade" appear>
           <el-card class="rounded-lg! mx-auto perspective-distant h-80">
             <template #header>
-              <h1 class="text-3xl">欢迎来到</h1>
-              <div>Vue3 + TypeScript Admin</div>
+              <el-row class="flex! items-center justify-around">
+                <el-image class="w-15 h-15" :src="settings.logo" fit="fill" />
+                <span class="uppercase font-bold text-[40px]">{{ settings.title }}</span>
+              </el-row>
             </template>
             <el-form
               class="flex! h-7em! flex-col justify-between"

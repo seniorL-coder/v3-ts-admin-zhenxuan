@@ -1,5 +1,5 @@
-import logo from '@/assets/images/image.png'
+import logo from '@/../public/favicon.svg'
 export default {
   logo: logo,
-  title: 'Vue3+TypeScript',
+  title: 'Nova-Admin',
 }
