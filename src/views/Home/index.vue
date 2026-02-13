@@ -22,7 +22,7 @@ watch(
 <template>
   <!-- 首页内容 -->
   <div class="home-main">
-    <el-row class="welcome-row" justify="center" align="middle">
+    <el-row class="welcome-row" justify="center" align="top">
       <el-col :span="12" class="welcome-column">
         <div class="welcome-card">
           <h2 class="welcome-title">欢迎回来，{{ userStore.userInfo.name }}！</h2>
@@ -36,21 +36,24 @@ watch(
 
 <style scoped lang="sass">
 .home-main
-  padding: 50px;
-  background-color: #f4f7fc;
+  padding: 50px
+  background-color: #f4f7fc
   width: 100%
+  height: calc(100vh - 10em)
+  background-image: url("@/assets/images/welcome.png")
+  background-size: cover
 
 .welcome-row
-  min-height: 400px;
+  min-height: 400px
 
 .welcome-column
-  text-align: center;
+  text-align: center
 
 .welcome-card
-  background-color: white;
-  padding: 40px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  background-color: white
+  padding: 40px
+  border-radius: 10px
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1)
 
 .welcome-title
   font-size: 24px;

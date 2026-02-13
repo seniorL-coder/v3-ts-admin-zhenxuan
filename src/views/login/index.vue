@@ -5,7 +5,7 @@ import type { FormInstance } from 'element-plus'
 import { useUserStore } from '@/stores/user.ts'
 import { useRouter, useRoute } from 'vue-router'
 import { User, Lock } from '@element-plus/icons-vue'
-import bg_img from '@/assets/images/background-img.svg'
+import bg_img from '@/assets/images/login_left-BVCCvqZF.png'
 
 const router = useRouter()
 const route = useRoute()
@@ -48,32 +48,31 @@ const onReset = () => {
 
 <template>
   <div class="w-full h-full overflow-hidden login-container">
-    <el-row class="h-full bg-blue-400" align="middle">
+    <el-row class="h-full login-box" align="middle">
       <el-col :span="12" :xs="{ span: 0 }">
         <el-image class="w-full h-full" :src="bg_img" fit="fill" />
       </el-col>
       <el-col :span="9" :xs="{ span: 24 }" :offset="3" class="form_container">
         <Transition name="scale-fade" appear>
-          <el-card class="w-2/3 mx-auto perspective-distant">
+          <el-card class="rounded-lg! mx-auto perspective-distant h-80">
             <template #header>
               <h1 class="text-3xl">欢迎来到</h1>
               <div>Vue3 + TypeScript Admin</div>
             </template>
             <el-form
+              class="flex! h-7em! flex-col justify-between"
               ref="formRef"
               :rules="rules"
               :model="formData"
-              label-position="left"
-              label-width="70px"
             >
-              <el-form-item label="用户名: " prop="username">
+              <el-form-item prop="username">
                 <el-input
                   v-model="formData.username"
                   :prefix-icon="User"
                   placeholder="请输入用户名"
                 />
               </el-form-item>
-              <el-form-item prop="password" label="密码: ">
+              <el-form-item prop="password">
                 <el-input
                   :prefix-icon="Lock"
                   v-model="formData.password"
@@ -84,11 +83,11 @@ const onReset = () => {
               </el-form-item>
             </el-form>
             <el-row>
-              <el-col :span="12" class="!flex justify-center items-center">
-                <el-button @click="onSubmit" type="primary">登录</el-button>
+              <el-col :span="12" class="flex! justify-center items-center">
+                <el-button @click="onSubmit" size="large" type="primary">登录</el-button>
               </el-col>
-              <el-col :span="12" class="!flex justify-center items-center">
-                <el-button @click="onReset" type="warning">重置</el-button>
+              <el-col :span="12" class="flex! justify-center items-center">
+                <el-button @click="onReset" size="large" type="warning">重置</el-button>
               </el-col>
             </el-row>
           </el-card></Transition
@@ -99,9 +98,21 @@ const onReset = () => {
 </template>
 
 <style scoped lang="sass">
-.form_container
-  background-image: url("/public/favicon.ico")
-  background-position: top right
+.login-container
+  background: url("@/assets/images/background-img.svg") no-repeat center center/contain
+  display: flex
+  align-items: center
+  justify-content: center
+.login-box
+  position: relative
+  display: flex
+  align-items: center
+  justify-content: space-around
+  width: 96.5%
+  height: 94%
+  padding: 0 50px
+  background-color: rgba(248, 248, 248, 0.8)
+  border-radius: 10px
 
 /* 进入前 & 离开后 */
 .scale-fade-enter-from,
@@ -119,4 +130,6 @@ const onReset = () => {
 .scale-fade-leave-from
   opacity: 1
   transform:  scale(1)
+:deep(.el-input__inner)
+  height: 40px !important
 </style>

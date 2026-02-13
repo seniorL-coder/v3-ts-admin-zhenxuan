@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { UploadProps } from 'element-plus'
 import { ref } from 'vue'
+import type { ModelSpu } from '@/types/SPU'
 
 const dialogImageUrl = ref('')
 const dialogVisible = ref(false)
@@ -25,7 +26,7 @@ const handlePictureCardPreview: UploadProps['onPreview'] = (uploadFile) => {
  * 处理销售属性值删除
  * @param row
  */
-const handleDelete = (row: any) => {
+const handleDelete = (row: ModelSpu) => {
   console.log(row)
 }
 /**
