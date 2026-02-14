@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import Category from '@/components/Category/index.vue'
 import { fetchSpuList } from '@/api/SPU'
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import type { ModelSpu, ResponseSpuList } from '@/types/SPU'
 import SPUForm from '@/views/Product/SPU/components/SPUForm.vue'
 import SKUForm from '@/views/Product/SPU/components/SKUForm.vue'
@@ -32,6 +32,15 @@ const getSPUList = async (page: number, limit: number, category3Id: number) => {
   pagination.value.pages = res.data.pages!
   pagination.value.total = res.data.total!
 }
+// 进入页面时获取SPU列表(要确保分类id有值)
+watch(
+  () => scene.value,
+  (newValue) => {
+    if (newValue === 0 && flag.value) {
+      getSPUList(pagination.value.page, pagination.value.pageSize, category3Id.value)
+    }
+  },
+)
 
 const handleUpdateCategoryIds = (categoryIds: number[]) => {
   flag.value = categoryIds.map((item) => !!item).every((item) => item)
@@ -67,7 +76,7 @@ const handleEditSPU = (row: ModelSpu) => {
 const handleAddSPU = () => {
   scene.value = 1
   console.log('添加SPU')
-  skuInfo.value = { mode: 'add', row: {} }
+  skuInfo.value = { mode: 'add', row: { category3Id: category3Id.value } }
 }
 /**
  * 查看已有SKU

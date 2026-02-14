@@ -117,6 +117,7 @@ export interface ModelSpuSaleAttr {
   saleAttrName?: string
   spuId?: number
   spuSaleAttrValueList?: ModelSaleAttrValue[]
+  isVirtual?: boolean
   [property: string]: any
 }
 

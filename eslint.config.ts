@@ -78,10 +78,11 @@ export default defineConfigWithVueTs(
       'vue/multi-word-component-names': ['warn', { ignores: ['index'] }],
       'vue/no-v-html': 'off',
       'vue/no-multiple-template-root': 'off',
+
       'vue/html-self-closing': [
         'warn',
         {
-          html: { void: 'never', normal: 'always', component: 'always' },
+          html: { void: 'always', normal: 'always', component: 'always' },
         },
       ],
 

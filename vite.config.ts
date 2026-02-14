@@ -79,7 +79,6 @@ export default defineConfig({
     },
   },
   server: {
-    port:8888,
     proxy: {
       '/api': {
         target: 'http://117.72.157.194:10086/admin/',

@@ -61,7 +61,7 @@ export const fetchSpuSaleAttrList = (id: number) => {
  * 新增SPU信息
  * @param data
  */
-export const saveSpuInfo = (data: any) => {
+export const fetchSaveSpuInfo = (data: any) => {
   return request({
     url: '/product/saveSpuInfo',
     method: 'POST',
@@ -72,7 +72,7 @@ export const saveSpuInfo = (data: any) => {
 /**
  * 更新SPU信息
  */
-export const updateSpuInfo = (data: any) => {
+export const fetchUpdateSpuInfo = (data: any) => {
   return request({
     url: '/product/updateSpuInfo',
     method: 'POST',
