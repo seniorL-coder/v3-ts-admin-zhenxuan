@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ElForm, type FormRules, type UploadProps } from 'element-plus'
+import { ElForm, ElInput, type FormRules, type UploadProps } from 'element-plus'
 import { computed, nextTick, ref, watch } from 'vue'
 import type {
   ModelSaleAttr,
@@ -397,7 +397,7 @@ const handleSave = async () => {
                   {{ item.saleAttrValueName }}
                 </el-tag>
                 <el-input
-                  :ref="(el) => (tagInputRefs[index] = el)"
+                  :ref="(el: any) => (tagInputRefs[index] = el)"
                   v-else
                   size="small"
                   class="w-[150px]! ml-2!"
