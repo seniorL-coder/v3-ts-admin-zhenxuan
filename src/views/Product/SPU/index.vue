@@ -8,7 +8,7 @@ import SKUForm from '@/views/Product/SPU/components/SKUForm.vue'
 const spuList = ref<ResponseSpuList>({})
 const category3Id = ref<number>(0)
 const flag = ref<boolean>(false) // 是否显示添加SPU按钮
-const scene = ref<number>(0) // 0: 展示SPU列表，1: 添加编辑SPU，2: 添加SKU
+const scene = ref<number>(2) // 0: 展示SPU列表，1: 添加编辑SPU，2: 添加SKU
 
 // 给子组件传递数据 要修改的SKU, 同时标记是添加SKU还是编辑SKU
 const skuInfo = ref<{ mode: 'add' | 'edit'; row: ModelSpu }>({
@@ -67,7 +67,6 @@ const handleDeleteSPU = (row: any) => {
  */
 const handleEditSPU = (row: ModelSpu) => {
   scene.value = 1
-  console.log('编辑SPU', row)
   skuInfo.value = { mode: 'edit', row }
 }
 /**
@@ -75,7 +74,6 @@ const handleEditSPU = (row: ModelSpu) => {
  */
 const handleAddSPU = () => {
   scene.value = 1
-  console.log('添加SPU')
   skuInfo.value = { mode: 'add', row: { category3Id: category3Id.value } }
 }
 /**
@@ -91,6 +89,7 @@ const handleViewSKUs = (row: any) => {
  */
 const handleAddSKU = (row: ModelSpu) => {
   console.log('添加SKU', row)
+  scene.value = 2 // 切换场景为添加SKU
 }
 /**
  * 监听子组件的 取消按钮点击事件, 切换场景
@@ -164,8 +163,8 @@ const handleUpdateScene = (num: number) => {
   <el-card class="mt-5!" v-show="scene === 1">
     <SPUForm :skuInfo="skuInfo" @update:scene="handleUpdateScene" />
   </el-card>
-  <el-card class="mb-5!" v-show="scene === 2">
-    <SKUForm />
+  <el-card class="mt-5!" v-show="scene === 2">
+    <SKUForm @update:scene="handleUpdateScene" />
   </el-card>
 </template>
 
