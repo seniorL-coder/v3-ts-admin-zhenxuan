@@ -27,8 +27,10 @@ export const fetchTrademarkList = () => {
     method: 'GET',
   })
 }
-// 获取商品图片列表接口
-// GET / admin / product / spuImageList / { id }
+/**
+ * 获取SPU图片列表
+ * @param id
+ */
 export const fetchSpuImageList = (id: number) => {
   return request<ModelSpuImage[]>({
     url: `/product/spuImageList/${id}`,

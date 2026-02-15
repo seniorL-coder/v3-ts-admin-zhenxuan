@@ -1,25 +1,93 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import type { FormInstance } from 'element-plus'
-import type { SkuInfo } from '@/types/SKU/index.d.s.ts'
-const emits = defineEmits(['update:scene'])
-// 获取表单实例引用（用于校验）
-const skuFormRef = ref<FormInstance>()
+import type { SkuInfo, ModelSkuImgDTO } from '@/types/SKU'
+import { fetchSpuImageList, fetchSpuSaleAttrList } from '@/api/SPU'
+import { fetchAttrInfoList } from '@/api/attr'
+import { fetchSaveSkuInfo } from '@/api/SKU'
 
+const emits = defineEmits(['update:scene'])
+const skuFormRef = ref<FormInstance>()
+const imageTableRef = ref()
+
+const props = defineProps<{
+  categoryIds: number[]
+  spuId: number
+  scene: number
+  tmId: string
+}>()
+
+// 获取分类下已有的属性与属性值，映射为带 valueId 的表单项（便于 v-model 收集）
+const getAttrList = async () => {
+  const { data } = await fetchAttrInfoList(
+    props.categoryIds[0]!,
+    props.categoryIds[1]!,
+    props.categoryIds[2]!,
+  )
+  skuForm.value.skuAttrValueList = (data ?? []).map((item) => ({
+    attrId: String(item.id),
+    attrName: item.attrName,
+    valueId: '' as string,
+    attrValueList: item.attrValueList ?? [],
+  }))
+}
+// 获取商品销售属性列表，映射为带 saleAttrId / saleAttrValueId 的表单项
+const getSaleAttrList = async () => {
+  const { data } = await fetchSpuSaleAttrList(props.spuId)
+  skuForm.value.skuSaleAttrValueList = (data ?? []).map((item) => ({
+    saleAttrId: String(item.id ?? item.baseSaleAttrId),
+    saleAttrName: item.saleAttrName,
+    saleAttrValueId: '' as string,
+    spuSaleAttrValueList: item.spuSaleAttrValueList ?? [],
+  }))
+}
+
+// 获取商品图片列表，映射为带 isDefault、spuImgId 的项（便于表格多选与默认图）
+const getImageList = async () => {
+  const { data } = await fetchSpuImageList(props.spuId)
+  skuForm.value.skuImageList = (data ?? []).map((img) => ({
+    imgName: img.imgName,
+    imgUrl: img.imgUrl ?? '',
+    spuImgId: img.id,
+    isDefault: '0' as string,
+  }))
+}
+const initSkuData = () => {
+  getAttrList()
+  getSaleAttrList()
+  getImageList()
+}
 // 初始化表单数据
 const skuForm = ref<SkuInfo>({
-  skuName: '',
-  price: '',
-  weight: '',
-  skuDesc: '',
+  isSale: 0, // 是否上架
+  skuName: 'vivo x300s',
+  price: '3999',
+  weight: '500',
+  skuDesc: '看似我在拉香蕉, 实则是香蕉拉了我一把。______奥德彪',
   category3Id: '', // 建议从父组件传入
-  spuId: '', // 建议从父组件传入
+  spuId: 0, // 建议从父组件传入
   tmId: '', // 建议从父组件传入
   skuDefaultImg: '',
   skuAttrValueList: [], // 平台属性
   skuSaleAttrValueList: [], // 销售属性
   skuImageList: [], // 图片列表
 })
+// 监听 scene 的变化
+watch(
+  () => props.scene,
+  (newVal) => {
+    if (newVal === 2) {
+      // 只有切换到当前场景时才发请求
+      // 调用初始化方法
+      initSkuData()
+      skuForm.value.category3Id = String(props.categoryIds[2]!)
+      skuForm.value.spuId = props.spuId
+      skuForm.value.tmId = props.tmId
+    }
+  },
+  { immediate: true },
+) // immediate 确保如果是初始进入也能触发
+
 const rules = {
   skuName: [
     { required: true, message: '请输入SKU名称', trigger: 'change' },
@@ -43,23 +111,71 @@ const rules = {
     { min: 2, max: 60, message: '长度在 2 到 50 个字符', trigger: 'change' },
   ],
 }
-// 取消, 切换到SPU列表
-const cancel = () => {
-  emits('update:scene', 0)
+const onImageSelectionChange = (rows: ModelSkuImgDTO[]) => {
+  if (rows.length > 1) {
+    rows.forEach((item) => {
+      item.isDefault = '0'
+    })
+    // 取最后选中的那一项
+    const last = rows[rows.length - 1]
+    last!.isDefault = '1'
+
+    // 清空所有选中
+    imageTableRef.value?.clearSelection()
+
+    // 重新选中最后一个
+    imageTableRef.value?.toggleRowSelection(last, true)
+    // selectedImageRows.value = [last!]
+    skuForm.value.skuImageList!.find((item) => {
+      if (item.spuImgId === last!.spuImgId) {
+        item.isDefault = '1'
+        skuForm.value.skuDefaultImg = item.imgUrl
+      }
+    })
+  } else {
+    if (rows.length === 1) {
+      rows[0]!.isDefault = '1'
+      skuForm.value.skuImageList!.find((item) => {
+        if (item.spuImgId === rows[0]!.spuImgId) {
+          item.isDefault = '1'
+        }
+      })
+      skuForm.value.skuDefaultImg = rows[0]!.imgUrl
+    }
+  }
 }
 
-// 假设这是你从父组件或 API 获取的属性列表
-const attrList = ref([
-  { id: 1, attrName: '内存', attrValueList: [{ id: 10, valueName: '8GB' }] },
-  { id: 2, attrName: '颜色', attrValueList: [{ id: 20, valueName: '红色' }] },
-  // ...
-])
+const setDefaultImage = (row: ModelSkuImgDTO) => {
+  const list = skuForm.value.skuImageList
+  if (!list) return
+  list.forEach((img) => {
+    img.isDefault = img.imgUrl === row.imgUrl ? '1' : '0'
+  })
+  skuForm.value.skuDefaultImg = row.imgUrl ?? ''
+  // ⭐ 自动勾选当前行(先把其他的取消勾选)
+  imageTableRef.value?.clearSelection()
+  imageTableRef.value?.toggleRowSelection(row, true)
+}
 
-const saleAttrList = ref([
-  { id: 2, saleAttrName: '颜色', spuSaleAttrValueList: [{ id: 20, saleAttrValueName: '红色' }] },
-  { id: 3, saleAttrName: '内存', spuSaleAttrValueList: [{ id: 30, saleAttrValueName: '8GB' }] },
-  // ...
-])
+const handleSave = () => {
+  skuFormRef.value?.validate(async (valid) => {
+    if (valid) {
+      // 校验是否选择默认图片
+      if (skuForm.value.skuDefaultImg !== '') {
+        await fetchSaveSkuInfo(skuForm.value)
+        ElMessage.success('保存成功')
+        emits('update:scene', 0)
+      } else {
+        ElMessage.error('请选择默认图片')
+      }
+    }
+  })
+}
+const cancel = () => {
+  // 重置表单
+  skuFormRef.value?.resetFields()
+  emits('update:scene', 0)
+}
 </script>
 
 <template>
@@ -84,16 +200,19 @@ const saleAttrList = ref([
       <el-input v-model="skuForm.skuDesc" placeholder="请输入描述" />
     </el-form-item>
     <el-form-item label="平台属性">
+      <!-- 加上边距 -->
       <div class="flex flex-wrap gap-2">
         <el-form-item
-          labelWidth="60px"
-          v-for="(item, index) in attrList"
-          :key="item.id"
+          labelWidth="100px"
+          class="mb-3!"
+          labelPosition="left"
+          v-for="(item, index) in skuForm.skuAttrValueList"
+          :key="item.attrId"
           :label="item.attrName"
           :prop="'skuAttrValueList.' + index + '.valueId'"
           :rules="{ required: true, message: '请选择' + item.attrName, trigger: 'change' }"
         >
-          <el-select placeholder="请选择" class="w-50!">
+          <el-select v-model="item.valueId" placeholder="请选择" class="w-50!" value-key="id">
             <el-option
               v-for="val in item.attrValueList"
               :key="val.id"
@@ -107,14 +226,19 @@ const saleAttrList = ref([
     <el-form-item label="销售属性">
       <div class="flex flex-wrap gap-2">
         <el-form-item
-          labelWidth="60px"
-          v-for="(item, index) in saleAttrList"
+          class="mb-3!"
+          labelWidth="100px"
+          v-for="(item, index) in skuForm.skuSaleAttrValueList"
           :key="item.id"
           :label="item.saleAttrName"
           :prop="'skuSaleAttrValueList.' + index + '.saleAttrValueId'"
           :rules="{ required: true, message: '请选择' + item.saleAttrName, trigger: 'change' }"
         >
-          <el-select placeholder="请选择" class="w-50!">
+          <el-select
+            placeholder="请选择"
+            class="w-50!"
+            v-model="skuForm.skuSaleAttrValueList![index]!.saleAttrValueId"
+          >
             <el-option
               v-for="val in item.spuSaleAttrValueList"
               :key="val.id"
@@ -126,21 +250,41 @@ const saleAttrList = ref([
       </div>
     </el-form-item>
     <el-form-item label="图片">
-      <el-table border stripe :data="[]">
+      <el-table
+        ref="imageTableRef"
+        border
+        stripe
+        :data="skuForm.skuImageList"
+        @selection-change="onImageSelectionChange"
+      >
         <el-table-column type="selection" width="60" align="center" />
         <el-table-column label="图片" width="380" align="center">
           <template #default="{ row }">
-            <img :src="row.img" alt="" />
+            <img
+              class="w-30 h-30"
+              :src="
+                'http://117.72.157.194:10086' + row.imgUrl.substring(row.imgUrl.indexOf('/static'))
+              "
+              alt=""
+            />
           </template>
         </el-table-column>
         <el-table-column label="名称" align="center">
           <template #default="{ row }">
-            {{ row.name }}
+            {{ row.imgName }}
           </template>
         </el-table-column>
         <el-table-column label="操作" align="center">
           <template #default="{ row }">
-            <el-button type="primary" icon="Setting">设为默认</el-button>
+            <el-button
+              :type="row.isDefault === '1' ? 'primary' : 'warning'"
+              :disabled="row.isDefault === '1'"
+              icon="Setting"
+              size="small"
+              @click="setDefaultImage(row)"
+            >
+              设为默认
+            </el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -151,7 +295,7 @@ const saleAttrList = ref([
       <el-button type="warning" @click="cancel">取消</el-button>
     </el-col>
     <el-col :span="4">
-      <el-button type="primary">保存</el-button>
+      <el-button type="primary" @click="handleSave">保存</el-button>
     </el-col>
   </el-row>
 </template>

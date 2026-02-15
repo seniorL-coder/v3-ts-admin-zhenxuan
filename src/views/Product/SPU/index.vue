@@ -8,7 +8,10 @@ import SKUForm from '@/views/Product/SPU/components/SKUForm.vue'
 const spuList = ref<ResponseSpuList>({})
 const category3Id = ref<number>(0)
 const flag = ref<boolean>(false) // 是否显示添加SPU按钮
-const scene = ref<number>(2) // 0: 展示SPU列表，1: 添加编辑SPU，2: 添加SKU
+const scene = ref<number>(0) // 0: 展示SPU列表，1: 添加编辑SPU，2: 添加SKU
+const spuId = ref<number>()
+const categoryIds = ref<number[]>([])
+const tmId = ref<number>() // 品牌ID
 
 // 给子组件传递数据 要修改的SKU, 同时标记是添加SKU还是编辑SKU
 const skuInfo = ref<{ mode: 'add' | 'edit'; row: ModelSpu }>({
@@ -42,12 +45,13 @@ watch(
   },
 )
 
-const handleUpdateCategoryIds = (categoryIds: number[]) => {
-  flag.value = categoryIds.map((item) => !!item).every((item) => item)
+const handleUpdateCategoryIds = (Ids: number[]) => {
+  flag.value = Ids.map((item) => !!item).every((item) => item)
   scene.value = 0 // 分类发生变化时，重置场景为0
   spuList.value = [] // 分类发生变化时，重置SPU列表
   if (flag.value) {
-    category3Id.value = categoryIds[2]!
+    category3Id.value = Ids[2]!
+    categoryIds.value = [...Ids]
     getSPUList(1, pagination.value.pageSize, category3Id.value)
   }
 }
@@ -90,6 +94,8 @@ const handleViewSKUs = (row: any) => {
 const handleAddSKU = (row: ModelSpu) => {
   console.log('添加SKU', row)
   scene.value = 2 // 切换场景为添加SKU
+  spuId.value = row.id
+  tmId.value = row.tmId
 }
 /**
  * 监听子组件的 取消按钮点击事件, 切换场景
@@ -164,7 +170,13 @@ const handleUpdateScene = (num: number) => {
     <SPUForm :skuInfo="skuInfo" @update:scene="handleUpdateScene" />
   </el-card>
   <el-card class="mt-5!" v-show="scene === 2">
-    <SKUForm @update:scene="handleUpdateScene" />
+    <SKUForm
+      :categoryIds="categoryIds"
+      :spuId="spuId!"
+      :scene="scene"
+      :tmId="tmId!"
+      @update:scene="handleUpdateScene"
+    />
   </el-card>
 </template>
 
