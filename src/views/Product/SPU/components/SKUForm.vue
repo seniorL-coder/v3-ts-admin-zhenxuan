@@ -111,38 +111,32 @@ const rules = {
     { min: 2, max: 60, message: '长度在 2 到 50 个字符', trigger: 'change' },
   ],
 }
+
+let isUpdating = false
 const onImageSelectionChange = (rows: ModelSkuImgDTO[]) => {
-  if (rows.length > 1) {
-    rows.forEach((item) => {
-      item.isDefault = '0'
-    })
-    // 取最后选中的那一项
-    const last = rows[rows.length - 1]
-    last!.isDefault = '1'
+  if (isUpdating || rows.length === 0) return
 
-    // 清空所有选中
-    imageTableRef.value?.clearSelection()
+  // 只保留最后一个
+  const last = rows[rows.length - 1]
 
-    // 重新选中最后一个
-    imageTableRef.value?.toggleRowSelection(last, true)
-    // selectedImageRows.value = [last!]
-    skuForm.value.skuImageList!.find((item) => {
-      if (item.spuImgId === last!.spuImgId) {
-        item.isDefault = '1'
-        skuForm.value.skuDefaultImg = item.imgUrl
-      }
-    })
-  } else {
-    if (rows.length === 1) {
-      rows[0]!.isDefault = '1'
-      skuForm.value.skuImageList!.find((item) => {
-        if (item.spuImgId === rows[0]!.spuImgId) {
-          item.isDefault = '1'
-        }
-      })
-      skuForm.value.skuDefaultImg = rows[0]!.imgUrl
-    }
-  }
+  // 强制单选
+  isUpdating = true
+  imageTableRef.value?.clearSelection()
+  imageTableRef.value?.toggleRowSelection(last, true)
+  // 3. 这里的代码执行完后，UI 更新触发的下一次 onImageSelectionChange
+  // 就会因为上面的 if (isUpdating) return 被拦截掉
+
+  // 所有图片取消默认
+  skuForm.value.skuImageList?.forEach((item) => {
+    item.isDefault = '0'
+  })
+
+  // 当前设为默认
+  last!.isDefault = '1'
+  skuForm.value.skuDefaultImg = last!.imgUrl
+
+  // 最后把锁打开，允许下一次用户真实的手动操作
+  isUpdating = false
 }
 
 const setDefaultImage = (row: ModelSkuImgDTO) => {
