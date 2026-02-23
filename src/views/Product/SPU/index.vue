@@ -180,7 +180,7 @@ const getSKUList = async (spuId: number) => {
         v-model:page-size="pagination.pageSize"
         :page-sizes="pagination.pageSizes"
         :total="pagination.total"
-        layout=" prev, pager, jumper, next,->,sizes, total"
+        layout="prev, pager, jumper, next,->,sizes, total"
       />
     </el-card>
     <el-card class="mt-5!" v-show="scene === 1">
