@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-export const useLayoutSeetingStore = defineStore(
+export const useLayoutSettingStore = defineStore(
   'layoutSetting',
   () => {
     // 定义是否折叠的变量

@@ -3,7 +3,7 @@ import Logo from '@/views/Layout/components/Logo/index.vue'
 import { useUserStore } from '@/stores/user.ts'
 import MenuComponent from '@/views/Layout/components/Menu/index.vue'
 import PageHeaderCom from '@/views/Layout/components/PageHeader/index.vue'
-import { useLayoutSeetingStore } from '@/stores/setting.ts'
+import { useLayoutSettingStore } from '@/stores/setting.ts'
 import { nextTick, ref, watch } from 'vue'
 
 const userStore = useUserStore()
@@ -11,7 +11,7 @@ const getUserInfo = async () => {
   await userStore.getUserInfo()
 }
 getUserInfo()
-const layoutSettingStore = useLayoutSeetingStore()
+const layoutSettingStore = useLayoutSettingStore()
 const refreshFlag = ref(true)
 
 watch(
@@ -45,11 +45,11 @@ watch(
       ></el-header>
       <el-main class="mt-4!">
         <el-card>
-          <Transition name="slide-fade" appear>
-            <RouterView v-slot="{ Component }">
-              <component :is="Component" v-if="refreshFlag" />
-            </RouterView>
-          </Transition>
+          <RouterView v-slot="{ Component }">
+            <Transition name="slide-fade" appear>
+              <component :is="Component" v-if="refreshFlag" :key="$route.fullPath" />
+            </Transition>
+          </RouterView>
         </el-card>
       </el-main>
     </el-container>

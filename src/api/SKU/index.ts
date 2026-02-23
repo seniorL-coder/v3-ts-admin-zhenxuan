@@ -15,3 +15,13 @@ export const fetchSaveSkuInfo = (data: SkuInfo) => {
     data,
   })
 }
+
+// 根据 SPU ID 查询 SKU 接口
+// GET
+// /admin/product/findBySpuId/{spuId}
+export const fetchSkuInfoBySpuId = (spuId: number) => {
+  return request<SkuInfo[]>({
+    url: `/product/findBySpuId/${spuId}`,
+    method: 'GET',
+  })
+}

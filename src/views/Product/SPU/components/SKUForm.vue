@@ -9,12 +9,11 @@ import { fetchSaveSkuInfo } from '@/api/SKU'
 const emits = defineEmits(['update:scene'])
 const skuFormRef = ref<FormInstance>()
 const imageTableRef = ref()
-
 const props = defineProps<{
   categoryIds: number[]
   spuId: number
   scene: number
-  tmId: string
+  tmId: number
 }>()
 
 // 获取分类下已有的属性与属性值，映射为带 valueId 的表单项（便于 v-model 收集）
@@ -82,7 +81,7 @@ watch(
       initSkuData()
       skuForm.value.category3Id = String(props.categoryIds[2]!)
       skuForm.value.spuId = props.spuId
-      skuForm.value.tmId = props.tmId
+      skuForm.value.tmId = String(props.tmId)
     }
   },
   { immediate: true },
@@ -104,7 +103,7 @@ const rules = {
   ],
   weight: [
     { required: true, message: '请输入重量', trigger: 'change' },
-    { pattern: /^\d+(\.\d{1,2})?$/, message: '请输入数值', trigger: 'change' },
+    { pattern: /^\d+(\.\d{1,2})?$/, message: '请输入整数或最多两位小数的数值', trigger: 'change' },
   ],
   skuDesc: [
     { required: true, message: '请输入描述', trigger: 'change' },
@@ -228,11 +227,7 @@ const cancel = () => {
           :prop="'skuSaleAttrValueList.' + index + '.saleAttrValueId'"
           :rules="{ required: true, message: '请选择' + item.saleAttrName, trigger: 'change' }"
         >
-          <el-select
-            placeholder="请选择"
-            class="w-50!"
-            v-model="skuForm.skuSaleAttrValueList![index]!.saleAttrValueId"
-          >
+          <el-select placeholder="请选择" class="w-50!" v-model="item.saleAttrValueId">
             <el-option
               v-for="val in item.spuSaleAttrValueList"
               :key="val.id"

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import LogoConfig from '@/settings.ts'
-import { useLayoutSeetingStore } from '@/stores/setting.ts'
-const layoutSettingStore = useLayoutSeetingStore()
+import { useLayoutSettingStore } from '@/stores/setting.ts'
+const layoutSettingStore = useLayoutSettingStore()
 </script>
 
 <template>

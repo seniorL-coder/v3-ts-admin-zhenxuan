@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { useLayoutSeetingStore } from '@/stores/setting'
+import { useLayoutSettingStore } from '@/stores/setting'
 import { useUserStore } from '@/stores/user.ts'
 import { useRoute, useRouter } from 'vue-router'
 const route = useRoute()
 const router = useRouter()
-const layoutSettingStore = useLayoutSeetingStore()
+const layoutSettingStore = useLayoutSettingStore()
 const userStore = useUserStore()
 const handleCommand = async (command: string) => {
   if (command === 'logout') {
@@ -15,7 +15,7 @@ const handleCommand = async (command: string) => {
     })
     await userStore.logout()
     const redirect = route.fullPath
-    router.replace({ path: '/login', query: { redirect: redirect } })
+    await router.replace({ path: '/login', query: { redirect: redirect } })
     ElMessage.success('退出成功')
   }
 }

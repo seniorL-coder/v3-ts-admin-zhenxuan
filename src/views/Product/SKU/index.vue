@@ -1,7 +1,9 @@
 <script setup lang="ts"></script>
 
 <template>
-  <h1>sku管理</h1>
+  <div>
+    <h1>sku管理</h1>
+  </div>
 </template>
 
 <style scoped lang="sass"></style>

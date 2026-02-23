@@ -5,6 +5,10 @@ import { ref, watch } from 'vue'
 import type { ModelSpu, ResponseSpuList } from '@/types/SPU'
 import SPUForm from '@/views/Product/SPU/components/SPUForm.vue'
 import SKUForm from '@/views/Product/SPU/components/SKUForm.vue'
+import DialogShowSku from '@/views/Product/SPU/components/dialogShowSku.vue'
+import { fetchSkuInfoBySpuId } from '@/api/SKU'
+import type { SkuInfo } from '@/types/SKU'
+
 const spuList = ref<ResponseSpuList>({})
 const category3Id = ref<number>(0)
 const flag = ref<boolean>(false) // 是否显示添加SPU按钮
@@ -12,6 +16,8 @@ const scene = ref<number>(0) // 0: 展示SPU列表，1: 添加编辑SPU，2: 添
 const spuId = ref<number>()
 const categoryIds = ref<number[]>([])
 const tmId = ref<number>() // 品牌ID
+const isShowDialogShowSku = ref(false) // 控制sku展示列表的显示与隐藏
+const skuList = ref<SkuInfo[]>([])
 
 // 给子组件传递数据 要修改的SKU, 同时标记是添加SKU还是编辑SKU
 const skuInfo = ref<{ mode: 'add' | 'edit'; row: ModelSpu }>({
@@ -85,14 +91,15 @@ const handleAddSPU = () => {
  * @param row
  */
 const handleViewSKUs = (row: any) => {
-  console.log('查看已有SKU', row)
+  isShowDialogShowSku.value = true
+  spuId.value = row.id
+  getSKUList(row.id)
 }
 /**
  * 添加SKU
  * @param row
  */
 const handleAddSKU = (row: ModelSpu) => {
-  console.log('添加SKU', row)
   scene.value = 2 // 切换场景为添加SKU
   spuId.value = row.id
   tmId.value = row.tmId
@@ -104,80 +111,89 @@ const handleAddSKU = (row: ModelSpu) => {
 const handleUpdateScene = (num: number) => {
   scene.value = num
 }
+
+// 获取SKU列表
+const getSKUList = async (spuId: number) => {
+  const { data } = await fetchSkuInfoBySpuId(spuId)
+  skuList.value = data
+}
 </script>
 
 <template>
-  <el-card>
-    <Category @updateCategoryIds="handleUpdateCategoryIds" />
-  </el-card>
-  <el-card v-show="scene === 0">
-    <div class="d-flex mb-2!">
-      <el-button :disabled="!flag" icon="Plus" type="primary" @click="handleAddSPU"
-        >添加SPU</el-button
-      >
-    </div>
-    <el-table :data="spuList.records" border stripe>
-      <el-table-column label="序号" width="50px" align="center">
-        <template #default="scope">
-          {{ (pagination.page - 1) * pagination.pageSize + scope.$index + 1 }}
-        </template>
-      </el-table-column>
-      <el-table-column label="SPU名称" width="150px" align="center" prop="spuName" />
-      <el-table-column label="SPU描述" align="center" prop="description" />
-      <el-table-column label="操作" align="center" width="250px">
-        <template #default="{ row }">
-          <el-button
-            type="primary"
-            icon="Plus"
-            size="small"
-            @click="handleAddSKU(row)"
-            title="添加SKU"
-          />
-          <el-button
-            type="success"
-            icon="View"
-            size="small"
-            @click="handleViewSKUs(row)"
-            title="查看已有SKU"
-          />
-          <el-button
-            type="primary"
-            icon="Edit"
-            size="small"
-            @click="handleEditSPU(row)"
-            title="编辑SPU"
-          />
-          <el-popconfirm title="确定要删除吗？" @confirm="handleDeleteSPU(row)">
-            <template #reference>
-              <el-button type="danger" icon="Delete" size="small" title="删除SPU" />
-            </template>
-          </el-popconfirm>
-        </template>
-      </el-table-column>
-    </el-table>
-    <el-pagination
-      class="mt-2!"
-      background
-      @change="handlePageChange"
-      v-model:current-page="pagination.page"
-      v-model:page-size="pagination.pageSize"
-      :page-sizes="pagination.pageSizes"
-      :total="pagination.total"
-      layout=" prev, pager, jumper, next,->,sizes, total"
-    />
-  </el-card>
-  <el-card class="mt-5!" v-show="scene === 1">
-    <SPUForm :skuInfo="skuInfo" @update:scene="handleUpdateScene" />
-  </el-card>
-  <el-card class="mt-5!" v-show="scene === 2">
-    <SKUForm
-      :categoryIds="categoryIds"
-      :spuId="spuId!"
-      :scene="scene"
-      :tmId="tmId!"
-      @update:scene="handleUpdateScene"
-    />
-  </el-card>
+  <div>
+    <el-card>
+      <Category @updateCategoryIds="handleUpdateCategoryIds" />
+    </el-card>
+    <el-card v-show="scene === 0" class="mt-2!">
+      <div class="d-flex mb-2!">
+        <el-button :disabled="!flag" icon="Plus" type="primary" @click="handleAddSPU"
+          >添加SPU</el-button
+        >
+      </div>
+      <el-table :data="spuList.records" border stripe>
+        <el-table-column label="序号" width="50px" align="center">
+          <template #default="scope">
+            {{ (pagination.page - 1) * pagination.pageSize + scope.$index + 1 }}
+          </template>
+        </el-table-column>
+        <el-table-column label="SPU名称" width="150px" align="center" prop="spuName" />
+        <el-table-column label="SPU描述" align="center" prop="description" />
+        <el-table-column label="操作" align="center" width="250px">
+          <template #default="{ row }">
+            <el-button
+              type="primary"
+              icon="Plus"
+              size="small"
+              @click="handleAddSKU(row)"
+              title="添加SKU"
+            />
+            <el-button
+              type="success"
+              icon="View"
+              size="small"
+              @click="handleViewSKUs(row)"
+              title="查看已有SKU"
+            />
+            <el-button
+              type="primary"
+              icon="Edit"
+              size="small"
+              @click="handleEditSPU(row)"
+              title="编辑SPU"
+            />
+            <el-popconfirm title="确定要删除吗？" @confirm="handleDeleteSPU(row)">
+              <template #reference>
+                <el-button type="danger" icon="Delete" size="small" title="删除SPU" />
+              </template>
+            </el-popconfirm>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-pagination
+        class="mt-2!"
+        background
+        @change="handlePageChange"
+        v-model:current-page="pagination.page"
+        v-model:page-size="pagination.pageSize"
+        :page-sizes="pagination.pageSizes"
+        :total="pagination.total"
+        layout=" prev, pager, jumper, next,->,sizes, total"
+      />
+    </el-card>
+    <el-card class="mt-5!" v-show="scene === 1">
+      <SPUForm :skuInfo="skuInfo" @update:scene="handleUpdateScene" />
+    </el-card>
+    <el-card class="mt-5!" v-show="scene === 2">
+      <SKUForm
+        :categoryIds="categoryIds"
+        :spuId="spuId!"
+        :scene="scene"
+        :tmId="tmId!"
+        @update:scene="handleUpdateScene"
+      />
+    </el-card>
+    <DialogShowSku :skuList="skuList" v-model="isShowDialogShowSku" :spuId="spuId!" />
+  </div>
 </template>
 
 <style scoped lang="sass"></style>
