@@ -81,3 +81,14 @@ export const fetchUpdateSpuInfo = (data: any) => {
     data,
   })
 }
+
+/**
+ * 删除SPU接口
+ * @param id
+ */
+export const fetchDeleteSpuInfo = (id: number) => {
+  return request({
+    url: `/product/deleteSpu/${id}`,
+    method: 'DELETE',
+  })
+}

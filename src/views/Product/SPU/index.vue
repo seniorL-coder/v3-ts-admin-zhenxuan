@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import Category from '@/components/Category/index.vue'
-import { fetchSpuList } from '@/api/SPU'
+import { fetchDeleteSpuInfo, fetchSpuList } from '@/api/SPU'
 import { ref, watch } from 'vue'
 import type { ModelSpu, ResponseSpuList } from '@/types/SPU'
 import SPUForm from '@/views/Product/SPU/components/SPUForm.vue'
@@ -68,8 +68,11 @@ const handlePageChange = async (page: number, pageSize: number) => {
  * 删除SPU
  * @param row
  */
-const handleDeleteSPU = (row: any) => {
-  console.log('删除SPU', row)
+const handleDeleteSPU = async (row: ModelSpu) => {
+  await fetchDeleteSpuInfo(row.id!)
+  ElMessage.success(`${row.spuName}删除成功`)
+  // 获取最新数据
+  await getSPUList(pagination.value.page, pagination.value.pageSize, category3Id.value)
 }
 /**
  * 编辑SPU
