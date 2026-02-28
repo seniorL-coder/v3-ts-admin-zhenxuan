@@ -2,7 +2,7 @@
 // POST
 // /admin/product/saveSkuInfo
 import { request } from '@/utils/request'
-import type { SkuInfo } from '@/types/SKU'
+import type { ModelSpuImage, SkuInfo } from '@/types/SKU'
 import type { ApiResponsePageLimit } from '@/types/apiResponse'
 /**
  * 新增SKU接口
@@ -36,6 +36,39 @@ export const fetchSkuInfoBySpuId = (spuId: number) => {
 export const fetchSkuIListPageLimit = (page: number, limit: number) => {
   return request<ApiResponsePageLimit<SkuInfo>>({
     url: `/product/list/${page}/${limit}`,
+    method: 'GET',
+  })
+}
+
+/**
+ * 根据SKU ID 查询SKU信息
+ * @param skuId
+ */
+export const fetchSkuDetailInfo = (skuId: number) => {
+  return request<SkuInfo>({
+    url: `/product/getSkuInfo/${skuId}`,
+    method: 'GET',
+  })
+}
+
+/**
+ * 上架SKU接口
+ * @param skuId
+ */
+export const fetchOnSale = (skuId: number) => {
+  return request({
+    url: `/product/onSale/${skuId}`,
+    method: 'GET',
+  })
+}
+
+/**
+ * 下架SKU接口
+ * @param skuId
+ */
+export const fetchCancelSale = (skuId: number) => {
+  return request({
+    url: `/product/cancelSale/${skuId}`,
     method: 'GET',
   })
 }

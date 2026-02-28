@@ -65,3 +65,25 @@ export interface ModelSkuSaleAttrValueDTO {
   skuId?: number
   [property: string]: any
 }
+
+/**
+ * model.SpuImage
+ */
+export interface ModelSpuImage {
+  createTime?: SimpleDateFormatSimpleDateFormat
+  ID?: number
+  id?: number
+  imgName?: string
+  imgUrl?: string
+  spuId?: number
+  updateTime?: SimpleDateFormatSimpleDateFormat
+  [property: string]: any
+}
+
+/**
+ * SimpleDateFormat.SimpleDateFormat
+ */
+export interface SimpleDateFormatSimpleDateFormat {
+  'time.Time'?: string
+  [property: string]: any
+}

@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import { fetchSkuIListPageLimit } from '@/api/SKU'
+import { fetchCancelSale, fetchOnSale, fetchSkuIListPageLimit } from '@/api/SKU'
 import { ref } from 'vue'
 import type { SkuInfo } from '@/types/SKU'
 import settings from '@/settings'
+import SkuDetailDrawer from '@/views/Product/SKU/components/SkuDetailDrawer.vue'
 const skuListPage = ref<SkuInfo[]>()
+const isShowSkuDetailDrawer = ref(false) // 是否显示SKU详情抽屉，默认不显示
+const currentSkuInfo = ref<SkuInfo>()
 const pagination = ref({
   page: 1,
   pageSize: 3,
@@ -24,6 +27,21 @@ getSpuListPageLimit(1, 3)
 
 const handlePageChange = (page: number, pageSize: number) => {
   getSpuListPageLimit(page, pageSize)
+}
+const handleShowSKUDetailInfo = (row: SkuInfo) => {
+  isShowSkuDetailDrawer.value = true
+  currentSkuInfo.value = row
+}
+const handleToggleOnSaleAndOffSale = (row: SkuInfo) => {
+  if (row.isSale === 0) {
+    fetchOnSale(row.id!)
+    row.isSale = 1
+    ElMessage.success('上架成功')
+  } else if (row.isSale === 1) {
+    fetchCancelSale(row.id!)
+    row.isSale = 0
+    ElMessage.success('下架成功')
+  }
 }
 </script>
 
@@ -52,9 +70,19 @@ const handlePageChange = (page: number, pageSize: number) => {
       <el-table-column label="价格(元)" align="center" prop="price" />
       <el-table-column label="操作" width="251" fixed="right" align="center">
         <template #default="{ row }">
-          <el-button icon="Top" type="primary" size="small" />
+          <el-button
+            :icon="row.isSale === 0 ? 'Bottom' : 'Top'"
+            :type="row.isSale === 0 ? 'info' : 'success'"
+            size="small"
+            @click="handleToggleOnSaleAndOffSale(row)"
+          />
           <el-button icon="Edit" type="warning" size="small" />
-          <el-button icon="InfoFilled" type="info" size="small" />
+          <el-button
+            icon="InfoFilled"
+            type="info"
+            size="small"
+            @click="handleShowSKUDetailInfo(row)"
+          />
           <el-button icon="Delete" type="danger" size="small" />
         </template>
       </el-table-column>
@@ -69,6 +97,7 @@ const handlePageChange = (page: number, pageSize: number) => {
       :total="pagination.total"
       layout="prev, pager, jumper, next,->,sizes, total"
     />
+    <SkuDetailDrawer v-model:visible="isShowSkuDetailDrawer" :skuInfo="currentSkuInfo || {}" />
   </div>
 </template>
 
