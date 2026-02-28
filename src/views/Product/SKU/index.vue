@@ -42,6 +42,13 @@ const handleDeleteSKU = async (row: SkuInfo) => {
   await getSpuListPageLimit(pagination.value.page, pagination.value.pageSize)
 }
 /**
+ * 处理编辑SKU
+ * @param row
+ */
+const handleEditSKU = (row: SkuInfo) => {
+  ElMessage.warning('玩命开发中...')
+}
+/**
  * 处理上架和下架
  * @param row
  */
@@ -89,7 +96,7 @@ const handleToggleOnSaleAndOffSale = (row: SkuInfo) => {
             size="small"
             @click="handleToggleOnSaleAndOffSale(row)"
           />
-          <el-button icon="Edit" type="warning" size="small" />
+          <el-button icon="Edit" type="warning" size="small" @click="handleEditSKU(row)" />
           <el-button
             icon="InfoFilled"
             type="info"

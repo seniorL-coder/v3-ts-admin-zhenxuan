@@ -1,111 +1,91 @@
-<template>
-  <el-container>
-    <!-- 头部 -->
-    <el-header
-      height="60px"
-      style="background-color: #409eff; color: #fff; text-align: center; line-height: 60px"
-    >
-      Header
-    </el-header>
-
-    <el-container>
-      <!-- 侧边栏 -->
-      <el-aside width="200px" style="background-color: #f5f5f5">
-        <el-menu default-active="1">
-          <el-menu-item index="1">菜单 1</el-menu-item>
-          <el-menu-item index="2">菜单 2</el-menu-item>
-          <el-menu-item index="3">菜单 3</el-menu-item>
-        </el-menu>
-      </el-aside>
-
-      <!-- 主体 -->
-      <el-main style="padding: 20px">
-        <!-- 卡片 + 按钮 -->
-        <el-card class="box-card" style="margin-bottom: 20px">
-          <h3>卡片标题</h3>
-          <p>卡片内容，用于测试布局和间距。</p>
-          <el-button type="primary">主要按钮</el-button>
-          <el-button>默认按钮</el-button>
-        </el-card>
-
-        <!-- 表单 -->
-        <el-form label-width="80px" style="margin-bottom: 20px">
-          <el-form-item label="姓名">
-            <el-input placeholder="请输入姓名"></el-input>
-          </el-form-item>
-          <el-form-item label="邮箱">
-            <el-input placeholder="请输入邮箱"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="success">提交</el-button>
-            <el-button type="warning">重置</el-button>
-          </el-form-item>
-        </el-form>
-
-        <!-- 表格 -->
-        <el-table :data="tableData" style="width: 100%">
-          <el-table-column prop="date" label="日期" width="180"></el-table-column>
-          <el-table-column prop="name" label="姓名" width="180"></el-table-column>
-          <el-table-column prop="address" label="地址"></el-table-column>
-        </el-table>
-      </el-main>
-    </el-container>
-    <el-container>
-      <!-- 侧边栏 -->
-      <el-aside width="200px" style="background-color: #f5f5f5">
-        <el-menu default-active="1">
-          <el-menu-item index="1">菜单 1</el-menu-item>
-          <el-menu-item index="2">菜单 2</el-menu-item>
-          <el-menu-item index="3">菜单 3</el-menu-item>
-        </el-menu>
-      </el-aside>
-
-      <!-- 主体 -->
-      <el-main style="padding: 20px">
-        <!-- 卡片 + 按钮 -->
-        <el-card class="box-card" style="margin-bottom: 20px">
-          <h3>卡片标题</h3>
-          <p>卡片内容，用于测试布局和间距。</p>
-          <el-button type="primary">主要按钮</el-button>
-          <el-button>默认按钮</el-button>
-        </el-card>
-
-        <!-- 表单 -->
-        <el-form label-width="80px" style="margin-bottom: 20px">
-          <el-form-item label="姓名">
-            <el-input placeholder="请输入姓名"></el-input>
-          </el-form-item>
-          <el-form-item label="邮箱">
-            <el-input placeholder="请输入邮箱"></el-input>
-          </el-form-item>
-          <el-form-item>
-            <el-button type="success">提交</el-button>
-            <el-button type="warning">重置</el-button>
-          </el-form-item>
-        </el-form>
-
-        <!-- 表格 -->
-        <el-table :data="tableData" style="width: 100%">
-          <el-table-column prop="date" label="日期" width="180"></el-table-column>
-          <el-table-column prop="name" label="姓名" width="180"></el-table-column>
-          <el-table-column prop="address" label="地址"></el-table-column>
-        </el-table>
-      </el-main>
-    </el-container>
-    <!-- 底部 -->
-    <el-footer height="40px" style="text-align: center"> Footer </el-footer>
-  </el-container>
-</template>
-
 <script setup lang="ts">
 import { ref } from 'vue'
-
-const tableData = ref([
-  { date: '2025-12-14', name: '张三', address: '北京市朝阳区' },
-  { date: '2025-12-14', name: '李四', address: '上海市浦东新区' },
-  { date: '2025-12-14', name: '王五', address: '广州市天河区' },
+const pagination = ref({
+  page: 1,
+  pageSize: 3,
+  pages: 0,
+  pageSizes: [3, 5, 10, 15],
+  total: 0,
+})
+const username = ref('')
+const userList = ref([
+  {
+    id: 1,
+    username: 'admin',
+    nickname: '管理员',
+    role: '管理员',
+    createTime: '2023-07-01 10:00:00',
+    updateTime: '2023-07-01 10:00:00',
+  },
+  {
+    id: 2,
+    username: 'user',
+    nickname: '普通用户',
+    role: '普通用户',
+    createTime: '2023-07-01 10:00:00',
+    updateTime: '2023-07-01 10:00:00',
+  },
 ])
+/**
+ * 处理分页变化
+ * @param page
+ * @param pageSize
+ */
+const handlePageChange = (page: number, pageSize: number) => {
+  console.log(page, pageSize)
+}
 </script>
+<template>
+  <div>
+    <el-card>
+      <el-form class="flex">
+        <el-form-item label="用户名: ">
+          <el-input v-model="username" placeholder="请输入用户名" />
+        </el-form-item>
+        <el-form-item class="ml-auto! mr-15!">
+          <el-button type="primary">查询</el-button>
+          <el-button>重置</el-button>
+        </el-form-item>
+      </el-form>
+    </el-card>
+    <el-card class="mt-5!">
+      <el-button type="primary">添加</el-button>
+      <el-button type="danger">批量删除</el-button>
+      <el-table class="mt-5!" :data="userList" border stripe>
+        <el-table-column align="center" type="selection" width="55" />
+        <el-table-column align="center" label="ID" width="180" prop="id" />
+        <el-table-column align="center" label="用户名" prop="username" />
+        <el-table-column
+          align="center"
+          label="用户昵称"
+          prop="nickname"
+          width="180"
+          show-overflow-tooltip
+        />
+        <el-table-column align="center" label="用户角色" prop="role" width="150" />
+        <el-table-column align="center" label="创建时间" prop="createTime" width="200" />
+        <el-table-column align="center" label="修改时间" prop="updateTime" width="200" />
+        <el-table-column fixed="right" label="操作" align="center" width="280">
+          <template #default="{ row }">
+            <el-button type="primary" icon="User" size="small">分配角色</el-button>
+            <el-button type="primary" icon="Edit" size="small">编辑</el-button>
+            <el-button type="danger" icon="Delete" size="small">删除</el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+    </el-card>
+    <el-pagination
+      class="mt-2!"
+      background
+      @change="handlePageChange"
+      v-model:current-page="pagination.page"
+      v-model:page-size="pagination.pageSize"
+      :page-sizes="pagination.pageSizes"
+      :total="pagination.total"
+      layout="prev, pager, jumper, next,->,sizes, total"
+    />
+  </div>
+</template>
 
 <style scoped>
 /* 可根据需要调整卡片和间距 */

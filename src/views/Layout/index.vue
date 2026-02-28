@@ -4,6 +4,8 @@ import { useUserStore } from '@/stores/user.ts'
 import MenuComponent from '@/views/Layout/components/Menu/index.vue'
 import PageHeaderCom from '@/views/Layout/components/PageHeader/index.vue'
 import { useLayoutSettingStore } from '@/stores/setting.ts'
+import zhCn from 'element-plus/es/locale/lang/zh-cn'
+
 import { nextTick, ref, watch } from 'vue'
 
 const userStore = useUserStore()
@@ -45,11 +47,13 @@ watch(
       ></el-header>
       <el-main class="mt-4!">
         <el-card>
-          <RouterView v-slot="{ Component }">
-            <Transition name="slide-fade" appear>
-              <component :is="Component" v-if="refreshFlag" :key="$route.fullPath" />
-            </Transition>
-          </RouterView>
+          <el-config-provider :locale="zhCn">
+            <RouterView v-slot="{ Component }">
+              <Transition name="slide-fade" appear>
+                <component :is="Component" v-if="refreshFlag" :key="$route.fullPath" />
+              </Transition>
+            </RouterView>
+          </el-config-provider>
         </el-card>
       </el-main>
     </el-container>
