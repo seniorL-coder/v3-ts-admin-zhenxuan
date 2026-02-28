@@ -72,3 +72,14 @@ export const fetchCancelSale = (skuId: number) => {
     method: 'GET',
   })
 }
+
+/**
+ * 删除SKU接口
+ * @param skuId
+ */
+export const fetchDeleteSku = (skuId: number) => {
+  return request({
+    url: `/product/deleteSku/${skuId}`,
+    method: 'DELETE',
+  })
+}

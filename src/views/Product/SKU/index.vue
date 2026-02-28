@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { fetchCancelSale, fetchOnSale, fetchSkuIListPageLimit } from '@/api/SKU'
+import { fetchCancelSale, fetchDeleteSku, fetchOnSale, fetchSkuIListPageLimit } from '@/api/SKU'
 import { ref } from 'vue'
 import type { SkuInfo } from '@/types/SKU'
 import settings from '@/settings'
@@ -32,6 +32,19 @@ const handleShowSKUDetailInfo = (row: SkuInfo) => {
   isShowSkuDetailDrawer.value = true
   currentSkuInfo.value = row
 }
+/**
+ * 处理删除SKU
+ * @param row
+ */
+const handleDeleteSKU = async (row: SkuInfo) => {
+  await fetchDeleteSku(row.id!)
+  ElMessage.success('删除成功')
+  await getSpuListPageLimit(pagination.value.page, pagination.value.pageSize)
+}
+/**
+ * 处理上架和下架
+ * @param row
+ */
 const handleToggleOnSaleAndOffSale = (row: SkuInfo) => {
   if (row.isSale === 0) {
     fetchOnSale(row.id!)
@@ -83,7 +96,11 @@ const handleToggleOnSaleAndOffSale = (row: SkuInfo) => {
             size="small"
             @click="handleShowSKUDetailInfo(row)"
           />
-          <el-button icon="Delete" type="danger" size="small" />
+          <el-popconfirm title="确定要删除吗？" @confirm="handleDeleteSKU(row)">
+            <template #reference>
+              <el-button icon="Delete" type="danger" size="small" />
+            </template>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
