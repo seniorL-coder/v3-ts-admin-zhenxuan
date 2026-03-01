@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { fetchDeleteUserAPI, fetchUserListAPI } from '@/api/user'
+import { fetchBatchDeleteUserAPI, fetchDeleteUserAPI, fetchUserListAPI } from '@/api/user'
 import type { ModelResponseUser } from '@/types/user'
 import UpdateUsernameDialog from '@/views/Acl/User/components/UpdateUsernameDialog.vue'
 const updateUser = ref({ id: 0, username: '', name: '' })
 const isVisibleUpdateUserDialog = ref(false)
+const ids = ref<number[]>([])
 const pagination = ref({
   page: 1,
   pageSize: 3,
@@ -42,11 +43,41 @@ const handleUpdateUser = (user: ModelResponseUser) => {
   isVisibleUpdateUserDialog.value = true
 }
 /**
+ * 添加用户
+ */
+const handleAddUser = () => {
+  isVisibleUpdateUserDialog.value = true
+  updateUser.value = {}
+}
+/**
  * 删除用户
  * @param user
  */
 const handleDeleteUser = async (user: ModelResponseUser) => {
   await fetchDeleteUserAPI(user.id!)
+  await getUserList(pagination.value.page, pagination.value.pageSize)
+  ElMessage.success('删除成功')
+}
+/**
+ * 处理选中行变化
+ * @param selection
+ */
+const handleSelectionChange = async (selection: ModelResponseUser[]) => {
+  ids.value = selection.map((item) => item.id!)
+}
+/**
+ * 批量删除用户
+ */
+const handleBatchDeleteUser = async () => {
+  await fetchBatchDeleteUserAPI(ids.value)
+  // 边界判断，如果删除的是最后一页的数据, page - 1
+  if (pagination.value.page === 1) pagination.value.page = 1
+  else if (
+    pagination.value.page === pagination.value.pages &&
+    ids.value.length === userList.value.length
+  ) {
+    pagination.value.page -= 1
+  }
   await getUserList(pagination.value.page, pagination.value.pageSize)
   ElMessage.success('删除成功')
 }
@@ -65,11 +96,22 @@ const handleDeleteUser = async (user: ModelResponseUser) => {
       </el-form>
     </el-card>
     <div class="mt-6!">
-      <el-button type="primary">添加</el-button>
-      <el-button type="danger">批量删除</el-button>
+      <el-button type="primary" @click="handleAddUser">添加</el-button>
+      <el-popconfirm title="确定要删除吗？" @confirm="handleBatchDeleteUser">
+        <template #reference>
+          <el-button type="danger">批量删除</el-button>
+        </template>
+      </el-popconfirm>
     </div>
-    <el-table :max-height="500" class="mt-5!" :data="userList || []" border stripe>
-      <el-table-column align="center" type="selection" width="55" />
+    <el-table
+      :max-height="500"
+      class="mt-5!"
+      :data="userList || []"
+      border
+      stripe
+      @selection-change="handleSelectionChange"
+    >
+      <el-table-column align="center" type="selection" width="55" fixed="left" />
       <el-table-column align="center" label="序号" width="55">
         <template #default="{ $index }">
           {{ (pagination.page - 1) * pagination.pageSize + $index + 1 }}

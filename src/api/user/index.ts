@@ -78,3 +78,15 @@ export const fetchBatchDeleteUserAPI = (idList: number[]) => {
     data: idList,
   })
 }
+
+/**
+ * 新增用户
+ * @param data
+ */
+export const fetchSaveUserAPI = (data: { username: string; name: string }) => {
+  return request({
+    method: 'POST',
+    url: '/acl/user/save',
+    data,
+  })
+}
