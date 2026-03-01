@@ -55,3 +55,26 @@ export const fetchUpdateUserAPI = (data: { id: number; username: string; name: s
     data,
   })
 }
+
+/**
+ * 删除用户
+ * @param id
+ */
+export const fetchDeleteUserAPI = (id: number) => {
+  return request({
+    method: 'DELETE',
+    url: `/acl/user/remove/${id}`,
+  })
+}
+
+/**
+ * 批量删除用户
+ * @param idList
+ */
+export const fetchBatchDeleteUserAPI = (idList: number[]) => {
+  return request({
+    method: 'DELETE',
+    url: '/acl/user/batchRemove',
+    data: idList,
+  })
+}

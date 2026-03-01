@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { fetchUserListAPI } from '@/api/user'
+import { fetchDeleteUserAPI, fetchUserListAPI } from '@/api/user'
 import type { ModelResponseUser } from '@/types/user'
 import UpdateUsernameDialog from '@/views/Acl/User/components/UpdateUsernameDialog.vue'
 const updateUser = ref({ id: 0, username: '', name: '' })
@@ -38,9 +38,17 @@ const handlePageChange = (page: number, pageSize: number) => {
  * @param user
  */
 const handleUpdateUser = (user: ModelResponseUser) => {
-  console.log(user)
   updateUser.value = { id: user.id!, username: user.username!, name: user.name! }
   isVisibleUpdateUserDialog.value = true
+}
+/**
+ * 删除用户
+ * @param user
+ */
+const handleDeleteUser = async (user: ModelResponseUser) => {
+  await fetchDeleteUserAPI(user.id!)
+  await getUserList(pagination.value.page, pagination.value.pageSize)
+  ElMessage.success('删除成功')
 }
 </script>
 <template>
@@ -85,7 +93,11 @@ const handleUpdateUser = (user: ModelResponseUser) => {
           <el-button type="primary" icon="Edit" size="small" @click="handleUpdateUser(row)"
             >编辑</el-button
           >
-          <el-button type="danger" icon="Delete" size="small">删除</el-button>
+          <el-popconfirm title="确定要删除吗？" @confirm="handleDeleteUser(row)">
+            <template #reference>
+              <el-button type="danger" icon="Delete" size="small">删除</el-button>
+            </template>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>
