@@ -1,6 +1,6 @@
 import { request } from '@/utils/request.ts'
-import type { loginParamsType, UserInfoType } from '@/types/user'
-import type { ApiResponse } from '@/types/apiResponse'
+import type { loginParamsType, ModelResponseUser, UserInfoType } from '@/types/user'
+import type { ApiResponse, ApiResponsePageLimit } from '@/types/apiResponse'
 
 export const fetchLoginAPI = (data: loginParamsType) => {
   return request<string>({
@@ -29,5 +29,17 @@ export const fetchLogoutAPI = () => {
   return request<unknown, ApiResponse<string>>({
     method: 'POST',
     url: '/acl/index/logout',
+  })
+}
+
+/**
+ * 获取用户列表
+ * @param page
+ * @param limit
+ */
+export const fetchUserListAPI = (page: number, limit: number) => {
+  return request<ApiResponsePageLimit<ModelResponseUser>>({
+    method: 'GET',
+    url: `/acl/user/${page}/${limit}`,
   })
 }
