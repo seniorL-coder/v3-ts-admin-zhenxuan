@@ -47,7 +47,7 @@ const handleUpdateUser = (user: ModelResponseUser) => {
  */
 const handleAddUser = () => {
   isVisibleUpdateUserDialog.value = true
-  updateUser.value = {}
+  updateUser.value = { id: 0, username: '', name: '' }
 }
 /**
  * 删除用户
