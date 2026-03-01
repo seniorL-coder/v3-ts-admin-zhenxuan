@@ -35,7 +35,11 @@ watch(
       <Logo />
 
       <el-scrollbar class="scrollBar">
-        <el-menu :collapse="layoutSettingStore.isCollapse" :default-active="$route.path">
+        <el-menu
+          :default-openeds="[$route.matched[0]?.path || '/']"
+          :collapse="layoutSettingStore.isCollapse"
+          :default-active="$route.path"
+        >
           <MenuComponent :menuList="userStore.menuRoutes" />
         </el-menu>
       </el-scrollbar>
@@ -103,7 +107,7 @@ watch(
 
 .slide-fade-leave-active
   position: absolute
-  transition: opacity 1s ease-in
+  transition: opacity .5s ease-in
 
 .slide-fade-leave-to
   opacity: 0

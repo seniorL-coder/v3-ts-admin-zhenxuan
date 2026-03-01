@@ -2,6 +2,9 @@
 import { ref } from 'vue'
 import { fetchUserListAPI } from '@/api/user'
 import type { ModelResponseUser } from '@/types/user'
+import UpdateUsernameDialog from '@/views/Acl/User/components/UpdateUsernameDialog.vue'
+const updateUser = ref({ id: 0, username: '', name: '' })
+const isVisibleUpdateUserDialog = ref(false)
 const pagination = ref({
   page: 1,
   pageSize: 3,
@@ -30,6 +33,15 @@ getUserList(1, 3)
 const handlePageChange = (page: number, pageSize: number) => {
   getUserList(page, pageSize)
 }
+/**
+ * 修改用户信息
+ * @param user
+ */
+const handleUpdateUser = (user: ModelResponseUser) => {
+  console.log(user)
+  updateUser.value = { id: user.id!, username: user.username!, name: user.name! }
+  isVisibleUpdateUserDialog.value = true
+}
 </script>
 <template>
   <div>
@@ -44,37 +56,39 @@ const handlePageChange = (page: number, pageSize: number) => {
         </el-form-item>
       </el-form>
     </el-card>
-    <el-card class="mt-5!">
+    <div class="mt-6!">
       <el-button type="primary">添加</el-button>
       <el-button type="danger">批量删除</el-button>
-      <el-table :max-height="500" class="mt-5!" :data="userList || []" border stripe>
-        <el-table-column align="center" type="selection" width="55" />
-        <el-table-column align="center" label="序号" width="55">
-          <template #default="{ $index }">
-            {{ (pagination.page - 1) * pagination.pageSize + $index + 1 }}
-          </template>
-        </el-table-column>
-        <el-table-column align="center" label="ID" width="180" prop="id" />
-        <el-table-column align="center" label="用户名" prop="username" width="180" />
-        <el-table-column
-          align="center"
-          label="用户昵称"
-          prop="name"
-          width="180"
-          show-overflow-tooltip
-        />
-        <el-table-column align="center" label="用户角色" prop="roleName" width="150" />
-        <el-table-column align="center" label="创建时间" prop="createTime" width="200" />
-        <el-table-column align="center" label="修改时间" prop="updateTime" width="200" />
-        <el-table-column fixed="right" label="操作" align="center" width="280">
-          <template #default="{ row }">
-            <el-button type="primary" icon="User" size="small">分配角色</el-button>
-            <el-button type="primary" icon="Edit" size="small">编辑</el-button>
-            <el-button type="danger" icon="Delete" size="small">删除</el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-    </el-card>
+    </div>
+    <el-table :max-height="500" class="mt-5!" :data="userList || []" border stripe>
+      <el-table-column align="center" type="selection" width="55" />
+      <el-table-column align="center" label="序号" width="55">
+        <template #default="{ $index }">
+          {{ (pagination.page - 1) * pagination.pageSize + $index + 1 }}
+        </template>
+      </el-table-column>
+      <el-table-column align="center" label="ID" width="180" prop="id" />
+      <el-table-column align="center" label="用户名" prop="username" width="180" />
+      <el-table-column
+        align="center"
+        label="用户昵称"
+        prop="name"
+        width="180"
+        show-overflow-tooltip
+      />
+      <el-table-column align="center" label="用户角色" prop="roleName" width="150" />
+      <el-table-column align="center" label="创建时间" prop="createTime" width="200" />
+      <el-table-column align="center" label="修改时间" prop="updateTime" width="200" />
+      <el-table-column fixed="right" label="操作" align="center" width="280">
+        <template #default="{ row }">
+          <el-button type="primary" icon="User" size="small">分配角色</el-button>
+          <el-button type="primary" icon="Edit" size="small" @click="handleUpdateUser(row)"
+            >编辑</el-button
+          >
+          <el-button type="danger" icon="Delete" size="small">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
     <el-pagination
       class="mt-2!"
       background
@@ -84,6 +98,11 @@ const handlePageChange = (page: number, pageSize: number) => {
       :page-sizes="pagination.pageSizes"
       :total="pagination.total"
       layout="prev, pager, jumper, next,->,sizes, total"
+    />
+    <UpdateUsernameDialog
+      :user="updateUser"
+      @update-user="getUserList(pagination.page, pagination.pageSize)"
+      v-model="isVisibleUpdateUserDialog"
     />
   </div>
 </template>

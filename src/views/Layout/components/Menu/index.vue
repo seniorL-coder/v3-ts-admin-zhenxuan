@@ -22,10 +22,10 @@ const goRoute = (name?: string) => {
         </template>
       </el-menu-item>
     </template>
-    <template v-else-if="item.children?.length === 1 && !item.meta.hidden">
-      <menu-component :menu-list="item.children" />
-    </template>
-    <template v-else-if="item.children?.length > 1 && !item.meta.hidden">
+    <!--    <template v-else-if="item.children?.length === 1 && !item.meta.hidden">-->
+    <!--      <menu-component :menu-list="item.children" />-->
+    <!--    </template>-->
+    <template v-else-if="item.children?.length >= 1 && !item.meta.hidden">
       <el-sub-menu :index="item.path">
         <template #title>
           <el-icon><component :is="item.meta.icon" /></el-icon>

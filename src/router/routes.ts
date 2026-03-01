@@ -7,9 +7,9 @@ export const constantRoutes: RouteRecordRaw[] = [
     component: () => import('@/views/Layout/index.vue'),
     redirect: '/home',
     meta: {
-      title: '',
+      title: 'Dashboard',
       index: 0,
-      icon: 'HomeFilled',
+      icon: 'Odometer',
       hidden: false,
     },
     children: [
@@ -37,7 +37,7 @@ export const constantRoutes: RouteRecordRaw[] = [
     },
     children: [
       {
-        path: 'role',
+        path: '/acl/role',
         name: 'Role',
         component: () => import('@/views/Acl/Role/index.vue'),
         meta: {
@@ -47,7 +47,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         },
       },
       {
-        path: 'permission',
+        path: '/acl/permission',
         name: 'Permission',
         component: () => import('@/views/Acl/Permission/index.vue'),
         meta: {
@@ -57,7 +57,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         },
       },
       {
-        path: 'user',
+        path: '/acl/user',
         name: 'User',
         component: () => import('@/views/Acl/User/index.vue'),
         meta: {
@@ -80,7 +80,7 @@ export const constantRoutes: RouteRecordRaw[] = [
     },
     children: [
       {
-        path: 'trademark',
+        path: '/product/trademark',
         name: 'Trademark',
         component: () => import('@/views/Product/Trademark/index.vue'),
         meta: {
@@ -90,7 +90,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         },
       },
       {
-        path: 'attr',
+        path: '/product/attr',
         name: 'Attr',
         component: () => import('@/views/Product/Attr/index.vue'),
         meta: {
@@ -100,7 +100,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         },
       },
       {
-        path: 'spu',
+        path: '/product/spu',
         name: 'Spu',
         component: () => import('@/views/Product/SPU/index.vue'),
         meta: {
@@ -110,7 +110,7 @@ export const constantRoutes: RouteRecordRaw[] = [
         },
       },
       {
-        path: 'sku',
+        path: '/product/sku',
         name: 'Sku',
         component: () => import('@/views/Product/SKU/index.vue'),
         meta: {

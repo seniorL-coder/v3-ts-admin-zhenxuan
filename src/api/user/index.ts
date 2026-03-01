@@ -43,3 +43,15 @@ export const fetchUserListAPI = (page: number, limit: number) => {
     url: `/acl/user/${page}/${limit}`,
   })
 }
+
+/**
+ * 更新用户
+ * @param data 用户信息 {id: number; username: string; name: string}
+ */
+export const fetchUpdateUserAPI = (data: { id: number; username: string; name: string }) => {
+  return request({
+    method: 'PUT',
+    url: '/acl/user/update',
+    data,
+  })
+}
