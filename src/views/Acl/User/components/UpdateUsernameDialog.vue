@@ -2,6 +2,9 @@
 import { nextTick, ref, watch } from 'vue'
 import { fetchSaveUserAPI, fetchUpdateUserAPI } from '@/api/user'
 import type { ElForm } from 'element-plus'
+import { useUserStore } from '@/stores/user.ts'
+const userStore = useUserStore()
+
 const title = ref('更新用户')
 // 表单实例
 const formRef = ref<InstanceType<typeof ElForm>>()
@@ -60,6 +63,10 @@ const handleUpdate = async () => {
       id: props.user.id,
       ...userInfo.value,
     })
+    // 如果用户更新的是自己, 则需要清除当前用户登录态
+    if (props.user.username === userStore.userInfo.name) {
+      await userStore.logout()
+    }
   } else {
     await fetchSaveUserAPI({ ...userInfo.value })
   }

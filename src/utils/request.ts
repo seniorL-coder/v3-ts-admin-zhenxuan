@@ -39,7 +39,7 @@ request.interceptors.response.use(
       case 206:
       case 207:
         // 登录失效或无权限
-        ElMessage.error('登录失效，请重新登录')
+        ElMessage.warning('登录失效，请重新登录')
         await userStore.logout()
         await router.push('/login')
         throw response
