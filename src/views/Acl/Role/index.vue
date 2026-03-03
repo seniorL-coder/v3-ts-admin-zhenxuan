@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import type { ModelRole } from '@/types/role'
-import { fetchGetRoleList } from '@/api/role'
+import { fetchGetRoleList, fetchRemoveRole } from '@/api/role'
 import UpdateAndAddRoleDialog from '@/types/user/components/UpdateAndAddRoleDialog.vue'
 const roleName = ref('')
 const roleList = ref<ModelRole[]>([])
@@ -48,14 +48,15 @@ const handleAssignPermission = () => {
 }
 // 编辑
 const handleEdit = (role: ModelRole) => {
-  console.log('handleEdit')
   editRoleInfo.value = role
   isShowAddAndEditRoleDialog.value = true
   mode.value = 'edit'
 }
 // 删除
-const handleDelete = () => {
-  console.log('handleDelete')
+const handleDelete = async (row: ModelRole) => {
+  await fetchRemoveRole(row.id!)
+  await getRoleList(pagination.value.page, pagination.value.pageSize, roleName.value)
+  ElMessage.success('删除成功')
 }
 // 添加角色
 const handleAddRole = () => {
@@ -98,7 +99,11 @@ const handleAddRole = () => {
           <el-button type="primary" size="small" icon="Edit" @click="handleEdit(row)"
             >编辑</el-button
           >
-          <el-button type="danger" size="small" icon="Delete" @click="handleDelete">删除</el-button>
+          <el-popconfirm title="确定要删除吗？" @confirm="handleDelete(row)">
+            <template #reference>
+              <el-button type="danger" size="small" icon="Delete">删除</el-button>
+            </template>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>

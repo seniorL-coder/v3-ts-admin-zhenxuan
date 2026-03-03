@@ -40,3 +40,10 @@ export const fetchUpdateRole = (data: { id: number; roleName: string; remark?: s
     data,
   })
 }
+// 删除角色接口
+export const fetchRemoveRole = (id: number) => {
+  return request({
+    url: `/acl/role/remove/${id}`,
+    method: 'DELETE',
+  })
+}
