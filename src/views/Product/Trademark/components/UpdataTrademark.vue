@@ -39,6 +39,7 @@ watch(
       }
       previewUrl.value = ''
     } else {
+      previewUrl.value = currEditTrademark.logoUrl || ''
       formModel.value = { ...currEditTrademark }
     }
   },
