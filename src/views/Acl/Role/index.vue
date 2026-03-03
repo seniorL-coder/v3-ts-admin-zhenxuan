@@ -14,7 +14,6 @@ const pagination = ref({
 // 获取角色列表
 const getRoleList = async (page: number, pageSize: number, roleName?: string) => {
   const { data } = await fetchGetRoleList(page, pageSize, roleName)
-  console.log(data)
   roleList.value = data.records || []
   pagination.value.page = data.current || 1
   pagination.value.pageSize = data.size || 3
@@ -24,17 +23,17 @@ const getRoleList = async (page: number, pageSize: number, roleName?: string) =>
 getRoleList(pagination.value.page, pagination.value.pageSize, roleName.value)
 
 const handlePageChange = (page: number, pageSize: number) => {
-  console.log('handlePageChange', page, pageSize)
-  getRoleList(page, pageSize)
+  getRoleList(page, pageSize, roleName.value)
 }
 
 // 查询角色
 const handleSearch = () => {
-  console.log('handleSearch')
+  getRoleList(1, pagination.value.pageSize, roleName.value)
 }
 // 重置查询输入框
 const handleReset = () => {
   roleName.value = ''
+  getRoleList(1, pagination.value.pageSize)
 }
 // 分配权限
 const handleAssignPermission = () => {
