@@ -17,3 +17,26 @@ export const fetchGetRoleList = (page: number, limit: number, roleName?: string)
     },
   })
 }
+
+/**
+ * 新增角色
+ * @param data
+ */
+export const fetchSaveRole = (data: { roleName: string; remark?: string }) => {
+  return request({
+    url: '/acl/role/save',
+    method: 'POST',
+    data,
+  })
+}
+/**
+ * 更新角色
+ * @param data
+ */
+export const fetchUpdateRole = (data: { id: number; roleName: string; remark?: string }) => {
+  return request({
+    url: '/acl/role/update',
+    method: 'PUT',
+    data,
+  })
+}

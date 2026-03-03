@@ -2,8 +2,15 @@
 import { ref } from 'vue'
 import type { ModelRole } from '@/types/role'
 import { fetchGetRoleList } from '@/api/role'
+import UpdateAndAddRoleDialog from '@/types/user/components/UpdateAndAddRoleDialog.vue'
 const roleName = ref('')
 const roleList = ref<ModelRole[]>([])
+// 添加的角色名称
+const editRoleInfo = ref<ModelRole>({})
+// 控制添加或者修改角色的弹窗变量
+const isShowAddAndEditRoleDialog = ref(false)
+const mode = ref<'add' | 'edit'>('add')
+
 const pagination = ref({
   page: 1,
   pageSize: 3,
@@ -40,12 +47,20 @@ const handleAssignPermission = () => {
   console.log('handleAssignPermission')
 }
 // 编辑
-const handleEdit = () => {
+const handleEdit = (role: ModelRole) => {
   console.log('handleEdit')
+  editRoleInfo.value = role
+  isShowAddAndEditRoleDialog.value = true
+  mode.value = 'edit'
 }
 // 删除
 const handleDelete = () => {
   console.log('handleDelete')
+}
+// 添加角色
+const handleAddRole = () => {
+  isShowAddAndEditRoleDialog.value = true
+  mode.value = 'add'
 }
 </script>
 
@@ -62,40 +77,47 @@ const handleDelete = () => {
         </el-form-item>
       </el-form>
     </el-card>
-    <el-card class="mt-5!">
-      <el-table :data="roleList" border stripe>
-        <el-table-column align="center" label="序号" width="60">
-          <template #default="{ $index }">
-            {{ $index + 1 + (pagination.page - 1) * pagination.pageSize }}
-          </template>
-        </el-table-column>
-        <el-table-column prop="id" align="center" label="角色ID" width="150" />
-        <el-table-column prop="roleName" align="center" label="角色名称" width="200" />
-        <el-table-column prop="createTime" align="center" label="创建时间" width="200" />
-        <el-table-column prop="updateTime" align="center" label="更新时间" width="200" />
-        <el-table-column align="center" label="操作">
-          <template #default>
-            <el-button type="success" size="small" icon="Setting" @click="handleAssignPermission"
-              >分配权限</el-button
-            >
-            <el-button type="primary" size="small" icon="Edit" @click="handleEdit">编辑</el-button>
-            <el-button type="danger" size="small" icon="Delete" @click="handleDelete"
-              >删除</el-button
-            >
-          </template>
-        </el-table-column>
-      </el-table>
-      <el-pagination
-        class="mt-2!"
-        background
-        @change="handlePageChange"
-        v-model:current-page="pagination.page"
-        v-model:page-size="pagination.pageSize"
-        :page-sizes="pagination.pageSizes"
-        :total="pagination.total"
-        layout="prev, pager, jumper, next,->,sizes, total"
-      />
-    </el-card>
+    <div class="mt-6! mb-5!">
+      <el-button type="primary" @click="handleAddRole">添加</el-button>
+    </div>
+    <el-table :data="roleList" border stripe>
+      <el-table-column align="center" label="序号" width="60">
+        <template #default="{ $index }">
+          {{ $index + 1 + (pagination.page - 1) * pagination.pageSize }}
+        </template>
+      </el-table-column>
+      <el-table-column prop="id" align="center" label="角色ID" width="150" />
+      <el-table-column prop="roleName" align="center" label="角色名称" width="200" />
+      <el-table-column prop="createTime" align="center" label="创建时间" width="200" />
+      <el-table-column prop="updateTime" align="center" label="更新时间" width="200" />
+      <el-table-column align="center" label="操作">
+        <template #default="{ row }">
+          <el-button type="success" size="small" icon="Setting" @click="handleAssignPermission"
+            >分配权限</el-button
+          >
+          <el-button type="primary" size="small" icon="Edit" @click="handleEdit(row)"
+            >编辑</el-button
+          >
+          <el-button type="danger" size="small" icon="Delete" @click="handleDelete">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <el-pagination
+      class="mt-2!"
+      background
+      @change="handlePageChange"
+      v-model:current-page="pagination.page"
+      v-model:page-size="pagination.pageSize"
+      :page-sizes="pagination.pageSizes"
+      :total="pagination.total"
+      layout="prev, pager, jumper, next,->,sizes, total"
+    />
+    <UpdateAndAddRoleDialog
+      v-model="isShowAddAndEditRoleDialog"
+      :mode="mode"
+      :roleInfo="editRoleInfo"
+      @updateRole="getRoleList(pagination.page, pagination.pageSize, roleName)"
+    />
   </div>
 </template>
 
