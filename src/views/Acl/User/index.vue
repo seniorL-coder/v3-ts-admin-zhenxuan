@@ -31,15 +31,15 @@ const pagination = ref({
 const username = ref('')
 const userList = ref<ModelResponseUser[]>([])
 // 分页获取用户列表
-const getUserList = async (page: number, pageSize: number) => {
-  const { data } = await fetchUserListAPI(page, pageSize)
+const getUserList = async (page: number, pageSize: number, username?: string) => {
+  const { data } = await fetchUserListAPI(page, pageSize, username)
   userList.value = data.records || []
   pagination.value.total = data.total || 0
   pagination.value.pages = data.pages || 0
   pagination.value.page = data.current || 1
   pagination.value.pageSize = data.size || 0
 }
-getUserList(1, 3)
+getUserList(1, 3, username.value)
 
 /**
  * 处理分页变化
@@ -47,7 +47,7 @@ getUserList(1, 3)
  * @param pageSize
  */
 const handlePageChange = (page: number, pageSize: number) => {
-  getUserList(page, pageSize)
+  getUserList(page, pageSize, username.value)
 }
 /**
  * 修改用户信息
@@ -70,7 +70,7 @@ const handleAddUser = () => {
  */
 const handleDeleteUser = async (user: ModelResponseUser) => {
   await fetchDeleteUserAPI(user.id!)
-  await getUserList(pagination.value.page, pagination.value.pageSize)
+  await getUserList(pagination.value.page, pagination.value.pageSize, username.value)
   ElMessage.success('删除成功')
 }
 /**
@@ -93,7 +93,7 @@ const handleBatchDeleteUser = async () => {
   ) {
     pagination.value.page -= 1
   }
-  await getUserList(pagination.value.page, pagination.value.pageSize)
+  await getUserList(pagination.value.page, pagination.value.pageSize, username.value)
   ElMessage.success('删除成功')
 }
 // 获取所有角色列表 和 用户的角色列表
@@ -101,6 +101,7 @@ const getAllRolesAndUserRoles = async (id: number) => {
   const { data } = await fetchAllRolesAndUserRolesAPI(id)
   allRoles.value = data.allRolesList!
   userRoles.value = data.assignRoles?.map((item: ModelRole) => item.id!) || []
+  checkAll.value = userRoles.value.length === allRoles.value.length
 }
 
 const handleAssignRole = (user: ModelResponseUser) => {
@@ -120,9 +121,17 @@ const handleCheckedRolesChange = (val: CheckboxValueType[]) => {
 // 提交分配角色
 const handleSubmitAssignRole = async () => {
   await fetchAssignRolesAPI({ userId: updateUser.value.id!, roleIdList: userRoles.value })
-  await getUserList(pagination.value.page, pagination.value.pageSize)
+  await getUserList(pagination.value.page, pagination.value.pageSize, username.value)
   ElMessage.success('分配角色成功')
   isShowAssignRoleDrawer.value = false
+}
+// 处理搜索
+const handleSearch = () => {
+  getUserList(1, pagination.value.pageSize, username.value)
+}
+const handleReset = () => {
+  username.value = ''
+  getUserList(1, pagination.value.pageSize)
 }
 </script>
 <template>
@@ -133,8 +142,8 @@ const handleSubmitAssignRole = async () => {
           <el-input v-model="username" placeholder="请输入用户名" />
         </el-form-item>
         <el-form-item class="ml-auto! mr-15!">
-          <el-button type="primary">查询</el-button>
-          <el-button>重置</el-button>
+          <el-button type="primary" @click="handleSearch">查询</el-button>
+          <el-button @click="handleReset">重置</el-button>
         </el-form-item>
       </el-form>
     </el-card>
@@ -200,7 +209,7 @@ const handleSubmitAssignRole = async () => {
     />
     <UpdateUsernameDialog
       :user="updateUser"
-      @update-user="getUserList(pagination.page, pagination.pageSize)"
+      @update-user="getUserList(pagination.page, pagination.pageSize, username)"
       v-model="isVisibleUpdateUserDialog"
     />
     <el-drawer title="分配角色" v-model="isShowAssignRoleDrawer">

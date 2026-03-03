@@ -41,11 +41,13 @@ export const fetchLogoutAPI = () => {
  * 获取用户列表
  * @param page
  * @param limit
+ * @param username
  */
-export const fetchUserListAPI = (page: number, limit: number) => {
+export const fetchUserListAPI = (page: number, limit: number, username?: string) => {
   return request<ApiResponsePageLimit<ModelResponseUser>>({
     method: 'GET',
     url: `/acl/user/${page}/${limit}`,
+    params: { username },
   })
 }
 
