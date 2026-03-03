@@ -57,5 +57,4 @@ export interface ModelRole {
   remark?: string
   roleName?: string
   updateTime?: SimpleDateFormatSimpleDateFormat
-  [property: string]: any
 }
