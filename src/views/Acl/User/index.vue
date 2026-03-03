@@ -1,11 +1,26 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { fetchBatchDeleteUserAPI, fetchDeleteUserAPI, fetchUserListAPI } from '@/api/user'
-import type { ModelResponseUser } from '@/types/user'
+import {
+  fetchAllRolesAndUserRolesAPI,
+  fetchAssignRolesAPI,
+  fetchBatchDeleteUserAPI,
+  fetchDeleteUserAPI,
+  fetchUserListAPI,
+} from '@/api/user'
+import type { ModelResponseUser, ModelRole } from '@/types/user'
 import UpdateUsernameDialog from '@/views/Acl/User/components/UpdateUsernameDialog.vue'
+import type { CheckboxValueType } from 'element-plus'
 const updateUser = ref({ id: 0, username: '', name: '' })
 const isVisibleUpdateUserDialog = ref(false)
 const ids = ref<number[]>([])
+const isShowAssignRoleDrawer = ref(false)
+const checkAll = ref(false)
+const isIndeterminate = ref(false)
+// 所有的角色列表
+const allRoles = ref<ModelRole[]>([])
+// 用户的角色列表
+const userRoles = ref<number[]>([])
+
 const pagination = ref({
   page: 1,
   pageSize: 3,
@@ -81,6 +96,34 @@ const handleBatchDeleteUser = async () => {
   await getUserList(pagination.value.page, pagination.value.pageSize)
   ElMessage.success('删除成功')
 }
+// 获取所有角色列表 和 用户的角色列表
+const getAllRolesAndUserRoles = async (id: number) => {
+  const { data } = await fetchAllRolesAndUserRolesAPI(id)
+  allRoles.value = data.allRolesList!
+  userRoles.value = data.assignRoles?.map((item: ModelRole) => item.id!) || []
+}
+
+const handleAssignRole = (user: ModelResponseUser) => {
+  isShowAssignRoleDrawer.value = true
+  updateUser.value = { id: user.id!, username: user.username!, name: user.name! }
+  getAllRolesAndUserRoles(user.id!)
+}
+// 处理全选变化
+const handleCheckAllChange = (val: CheckboxValueType) => {
+  userRoles.value = val ? allRoles.value.map((item) => item.id!) : []
+  isIndeterminate.value = false
+}
+// 处理选中角色变化
+const handleCheckedRolesChange = (val: CheckboxValueType[]) => {
+  isIndeterminate.value = !(val.length === allRoles.value.length)
+}
+// 提交分配角色
+const handleSubmitAssignRole = async () => {
+  await fetchAssignRolesAPI({ userId: updateUser.value.id!, roleIdList: userRoles.value })
+  await getUserList(pagination.value.page, pagination.value.pageSize)
+  ElMessage.success('分配角色成功')
+  isShowAssignRoleDrawer.value = false
+}
 </script>
 <template>
   <div>
@@ -131,7 +174,9 @@ const handleBatchDeleteUser = async () => {
       <el-table-column align="center" label="修改时间" prop="updateTime" width="200" />
       <el-table-column fixed="right" label="操作" align="center" width="280">
         <template #default="{ row }">
-          <el-button type="primary" icon="User" size="small">分配角色</el-button>
+          <el-button type="primary" icon="User" size="small" @click="handleAssignRole(row)"
+            >分配角色</el-button
+          >
           <el-button type="primary" icon="Edit" size="small" @click="handleUpdateUser(row)"
             >编辑</el-button
           >
@@ -158,6 +203,21 @@ const handleBatchDeleteUser = async () => {
       @update-user="getUserList(pagination.page, pagination.pageSize)"
       v-model="isVisibleUpdateUserDialog"
     />
+    <el-drawer title="分配角色" v-model="isShowAssignRoleDrawer">
+      <el-checkbox
+        v-model="checkAll"
+        :indeterminate="isIndeterminate"
+        @change="handleCheckAllChange"
+      >
+        Check all
+      </el-checkbox>
+      <el-checkbox-group v-model="userRoles" @change="handleCheckedRolesChange">
+        <el-checkbox v-for="role in allRoles" :key="role.id" :label="role.id" :value="role.id">
+          {{ role.roleName }}
+        </el-checkbox>
+      </el-checkbox-group>
+      <el-button type="primary" @click="handleSubmitAssignRole">分配角色</el-button>
+    </el-drawer>
   </div>
 </template>
 

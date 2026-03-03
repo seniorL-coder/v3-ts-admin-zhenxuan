@@ -1,5 +1,10 @@
 import { request } from '@/utils/request.ts'
-import type { loginParamsType, ModelResponseUser, UserInfoType } from '@/types/user'
+import type {
+  loginParamsType,
+  ModelResponseToAssignRole,
+  ModelResponseUser,
+  UserInfoType,
+} from '@/types/user'
 import type { ApiResponse, ApiResponsePageLimit } from '@/types/apiResponse'
 
 export const fetchLoginAPI = (data: loginParamsType) => {
@@ -87,6 +92,28 @@ export const fetchSaveUserAPI = (data: { username: string; name: string }) => {
   return request({
     method: 'POST',
     url: '/acl/user/save',
+    data,
+  })
+}
+
+/**
+ * 获取所有角色列表和用户已有角色
+ * @param id
+ */
+export const fetchAllRolesAndUserRolesAPI = (id: number) => {
+  return request<ModelResponseToAssignRole>({
+    method: 'GET',
+    url: `/acl/user/toAssign/${id}`,
+  })
+}
+/**
+ * 为用户分配角色
+ * @param data
+ */
+export const fetchAssignRolesAPI = (data: { userId: number; roleIdList: number[] }) => {
+  return request({
+    method: 'POST',
+    url: '/acl/user/doAssignRole',
     data,
   })
 }

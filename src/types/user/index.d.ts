@@ -38,3 +38,24 @@ export interface SimpleDateFormatSimpleDateFormat {
   'time.Time'?: string
   [property: string]: any
 }
+
+/**
+ * model.ResponseToAssignRole
+ */
+export interface ModelResponseToAssignRole {
+  allRolesList?: ModelRole[]
+  assignRoles?: ModelRole[]
+}
+
+/**
+ * model.Role
+ */
+export interface ModelRole {
+  createTime?: SimpleDateFormatSimpleDateFormat
+  ID?: number
+  id?: number
+  remark?: string
+  roleName?: string
+  updateTime?: SimpleDateFormatSimpleDateFormat
+  [property: string]: any
+}
