@@ -6,7 +6,7 @@ export interface ModelMenu {
   code?: string
   createTime?: SimpleDateFormatSimpleDateFormat
   ID?: number
-  id?: number
+  id?: number | null
   level?: number
   name?: string
   pid?: number
@@ -24,4 +24,17 @@ export interface ModelMenu {
 export interface SimpleDateFormatSimpleDateFormat {
   'time.Time'?: string
   [property: string]: any
+}
+
+// 新增菜单所需要的类型
+export interface AddMenu {
+  id: number | null
+  code: string
+  level: number
+  name: string
+  pid: number
+  /**
+   * 菜单类型 1:菜单 2:功能
+   */
+  type: number
 }

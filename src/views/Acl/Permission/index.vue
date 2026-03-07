@@ -2,32 +2,69 @@
 import { fetchGetPermission } from '@/api/menu/index.ts'
 import type { ModelMenu } from '@/types/menu'
 import { ref } from 'vue'
+import AddAndUpdatePermission from '@/views/Acl/Permission/components/addAndUpdatePermission.vue'
 const tableData = ref<ModelMenu[]>([])
+const mode = ref<'add' | 'update'>('add')
+const currentRow = ref<ModelMenu>({})
+const isShowDialog = ref<boolean>(false)
 
 const getPermission = async () => {
   const { data } = await fetchGetPermission()
   tableData.value = data
 }
 getPermission()
+const addPermission = (row: ModelMenu) => {
+  mode.value = 'add'
+  console.log(row, 'add')
+  currentRow.value = row
+  isShowDialog.value = true
+}
+const deletePermission = (row: ModelMenu) => {
+  console.log(row, 'delete')
+}
+
+const updatePermission = (row: ModelMenu) => {
+  mode.value = 'update'
+  currentRow.value = row
+  isShowDialog.value = true
+}
 </script>
 
 <template>
-  <el-table :data="tableData" row-key="id" border :tree-props="{ children: 'children' }">
-    <el-table-column prop="name" label="菜单名称" />
+  <div>
+    <el-table
+      :expand-row-keys="['1']"
+      :data="tableData"
+      row-key="id"
+      border
+      :tree-props="{ children: 'children' }"
+    >
+      <el-table-column prop="name" label="菜单名称" />
 
-    <el-table-column prop="code" label="权限值" />
+      <el-table-column prop="code" label="权限值" />
 
-    <el-table-column prop="updateTime" label="修改时间" />
-    <el-table-column label="操作">
-      <template #default="{ row }">
-        <el-button size="small" type="success">{{
-          row.level === 4 ? '添加功能' : '添加菜单'
-        }}</el-button>
-        <el-button size="small">编辑</el-button>
-        <el-button size="small" type="danger">删除</el-button>
-      </template>
-    </el-table-column>
-  </el-table>
+      <el-table-column prop="updateTime" label="修改时间" />
+      <el-table-column label="操作">
+        <template #default="{ row }">
+          <el-button
+            @click="addPermission(row)"
+            v-if="row.level <= 3"
+            size="small"
+            type="success"
+            >{{ row.level === 3 ? '添加功能' : '添加菜单' }}</el-button
+          >
+          <el-button size="small" @click="updatePermission(row)">编辑</el-button>
+          <el-button size="small" @click="deletePermission(row)" type="danger">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+    <add-and-update-permission
+      @get-permission-list="getPermission"
+      :mode="mode"
+      :row="currentRow"
+      v-model="isShowDialog"
+    />
+  </div>
 </template>
 
 <style lang="sass" scoped>
