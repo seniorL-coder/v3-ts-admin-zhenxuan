@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { fetchGetPermission } from '@/api/menu/index.ts'
+import { fetchGetPermission, fetchRemovePermission } from '@/api/menu/index.ts'
 import type { ModelMenu } from '@/types/menu'
 import { ref } from 'vue'
 import AddAndUpdatePermission from '@/views/Acl/Permission/components/addAndUpdatePermission.vue'
@@ -15,12 +15,13 @@ const getPermission = async () => {
 getPermission()
 const addPermission = (row: ModelMenu) => {
   mode.value = 'add'
-  console.log(row, 'add')
   currentRow.value = row
   isShowDialog.value = true
 }
-const deletePermission = (row: ModelMenu) => {
-  console.log(row, 'delete')
+const deletePermission = async (row: ModelMenu) => {
+  await fetchRemovePermission(row.id!)
+  await getPermission()
+  ElMessage.success('删除成功')
 }
 
 const updatePermission = (row: ModelMenu) => {
@@ -54,7 +55,11 @@ const updatePermission = (row: ModelMenu) => {
             >{{ row.level === 3 ? '添加功能' : '添加菜单' }}</el-button
           >
           <el-button size="small" @click="updatePermission(row)">编辑</el-button>
-          <el-button size="small" @click="deletePermission(row)" type="danger">删除</el-button>
+          <el-popconfirm title="确定要删除吗？" @confirm="deletePermission(row)">
+            <template #reference>
+              <el-button size="small" type="danger">删除</el-button>
+            </template>
+          </el-popconfirm>
         </template>
       </el-table-column>
     </el-table>

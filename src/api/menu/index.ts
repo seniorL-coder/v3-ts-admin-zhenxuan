@@ -34,3 +34,14 @@ export const fetchUpdatePermission = (data: ModelMenu) => {
     data,
   })
 }
+
+/**
+ * 删除菜单
+ * @param id
+ */
+export const fetchRemovePermission = (id: number) => {
+  return request({
+    method: 'DELETE',
+    url: `/acl/permission/remove/${id}`,
+  })
+}
