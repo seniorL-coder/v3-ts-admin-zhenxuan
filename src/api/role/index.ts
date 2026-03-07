@@ -1,7 +1,7 @@
 import { request } from '@/utils/request.ts'
 import type { ApiResponsePageLimit } from '@/types/apiResponse'
-import type { ModelRole } from '@/types/role'
-
+import type { ModelMenu, ModelRole } from '@/types/role'
+import qs from 'qs'
 /**
  * 获取角色分页列表
  * @param page 当前页码
@@ -45,5 +45,31 @@ export const fetchRemoveRole = (id: number) => {
   return request({
     url: `/acl/role/remove/${id}`,
     method: 'DELETE',
+  })
+}
+
+/**
+ * 根据角色获取菜单
+ * @param roleId
+ */
+export const fetchGetRolePermission = (roleId: number) => {
+  return request<ModelMenu[]>({
+    url: `/acl/permission/toAssign/${roleId}`,
+    method: 'GET',
+  })
+}
+
+/**
+ * 为角色分配权限
+ * @param data { roleId: number; permissionIds: number[] }
+ */
+export const fetchSaveRolePermission = (data: { roleId: number; permissionIds: number[] }) => {
+  return request({
+    url: '/acl/permission/doAssign',
+    method: 'POST',
+    params: {
+      roleId: data.roleId,
+      permissionId: data.permissionIds.join(','),
+    },
   })
 }

@@ -78,7 +78,8 @@ export default defineConfigWithVueTs(
       'vue/multi-word-component-names': ['warn', { ignores: ['index'] }],
       'vue/no-v-html': 'off',
       'vue/no-multiple-template-root': 'off',
-
+      // 关闭 '没有任何作用的表达式' 规则，会误判三元表达式或者短路运算
+      '@typescript-eslint/no-unused-expressions': 'off',
       'vue/html-self-closing': [
         'warn',
         {

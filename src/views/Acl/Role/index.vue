@@ -1,8 +1,17 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { ModelRole } from '@/types/role'
-import { fetchGetRoleList, fetchRemoveRole } from '@/api/role'
+import type { ModelMenu, ModelRole } from '@/types/role'
+import {
+  fetchGetRoleList,
+  fetchGetRolePermission,
+  fetchRemoveRole,
+  fetchSaveRolePermission,
+} from '@/api/role'
 import UpdateAndAddRoleDialog from '@/types/user/components/UpdateAndAddRoleDialog.vue'
+import type { TreeInstance } from 'element-plus'
+import { fetchAssignRolesAPI } from '@/api/user'
+
+const loading = ref(true)
 const roleName = ref('')
 const roleList = ref<ModelRole[]>([])
 // 添加的角色名称
@@ -10,6 +19,11 @@ const editRoleInfo = ref<ModelRole>({})
 // 控制添加或者修改角色的弹窗变量
 const isShowAddAndEditRoleDialog = ref(false)
 const mode = ref<'add' | 'edit'>('add')
+// 控制分配权限的抽屉显示与隐藏的变量
+const isShowAssignPermission = ref(false)
+const treeData = ref<ModelMenu[]>([])
+const assignRoleInfo = ref<ModelRole>({})
+const defaultCheckedKeys = ref<number[]>([])
 
 const pagination = ref({
   page: 1,
@@ -42,9 +56,25 @@ const handleReset = () => {
   roleName.value = ''
   getRoleList(1, pagination.value.pageSize)
 }
+// 辅助方法, 用于过滤出已经分配的权限id
+const filterCheckedKeys = (data: ModelMenu[]) => {
+  data.forEach((item) => {
+    if (item.children && item.children.length > 0) {
+      filterCheckedKeys(item.children)
+    } else {
+      item.select && defaultCheckedKeys.value.push(item.id!)
+    }
+  })
+}
+
 // 分配权限
-const handleAssignPermission = () => {
-  console.log('handleAssignPermission')
+const handleAssignPermission = async (row: ModelRole) => {
+  assignRoleInfo.value = row
+  isShowAssignPermission.value = true
+  const { data } = await fetchGetRolePermission(row.id!)
+  treeData.value = data
+  filterCheckedKeys(data)
+  loading.value = false
 }
 // 编辑
 const handleEdit = (role: ModelRole) => {
@@ -62,6 +92,31 @@ const handleDelete = async (row: ModelRole) => {
 const handleAddRole = () => {
   isShowAddAndEditRoleDialog.value = true
   mode.value = 'add'
+}
+const treeRef = ref<TreeInstance>()
+
+const getCheckedKeys = async () => {
+  // 所有被完全选中的节点
+  const checkedKeys = treeRef.value!.getCheckedKeys(false)
+  // 所有被半选中的节点
+  const halfCheckedIds = treeRef.value!.getHalfCheckedKeys()
+  // 所有被选中的节点（包括半选中的节点）
+  const allCheckedKeys = [...checkedKeys, ...halfCheckedIds] as number[]
+  await fetchSaveRolePermission({
+    roleId: assignRoleInfo.value.id!,
+    permissionIds: allCheckedKeys,
+  })
+  isShowAssignPermission.value = false
+  ElMessage.success('分配权限成功')
+}
+
+// const resetChecked = () => {
+//   treeRef.value!.setCheckedKeys([], false)
+// }
+
+const defaultProps = {
+  children: 'children',
+  label: 'name',
 }
 </script>
 
@@ -93,7 +148,7 @@ const handleAddRole = () => {
       <el-table-column prop="updateTime" align="center" label="更新时间" width="200" />
       <el-table-column align="center" label="操作">
         <template #default="{ row }">
-          <el-button type="success" size="small" icon="Setting" @click="handleAssignPermission"
+          <el-button type="success" size="small" icon="Setting" @click="handleAssignPermission(row)"
             >分配权限</el-button
           >
           <el-button type="primary" size="small" icon="Edit" @click="handleEdit(row)"
@@ -123,6 +178,27 @@ const handleAddRole = () => {
       :roleInfo="editRoleInfo"
       @updateRole="getRoleList(pagination.page, pagination.pageSize, roleName)"
     />
+    <el-drawer v-model="isShowAssignPermission">
+      <template #title>
+        <div>
+          当前分配权限角色:
+          <span class="ml-1! text-blue-500 font-bold">{{ assignRoleInfo.roleName }}</span>
+        </div>
+        <el-button class="mr-8!" @click="getCheckedKeys" type="success">确认</el-button>
+      </template>
+      <el-tree
+        v-loading="loading"
+        ref="treeRef"
+        style="max-width: 600px"
+        :data="treeData"
+        show-checkbox
+        default-expand-all
+        node-key="id"
+        highlight-current
+        :props="defaultProps"
+        :default-checked-keys="defaultCheckedKeys"
+      />
+    </el-drawer>
   </div>
 </template>
 
