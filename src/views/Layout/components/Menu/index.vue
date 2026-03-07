@@ -40,16 +40,15 @@ const goRoute = (name?: string) => {
 <style scoped lang="sass">
 @use '@/styles/element/index.scss' as *
 .el-menu-item
-  color: $base-menu-text-color
-  background-color: $base-menu-bg-color
+  //color: $base-menu-text-color
+  //background-color: $base-menu-bg-color
   &:hover
-    background-color: $base-menu-hover-bg-color
-    color: $base-menu-hover-text-color
-
+    //background-color: $base-menu-hover-bg-color
+    //color: $base-menu-hover-text-color
 
 :deep(.el-sub-menu__title)
-  color: $base-menu-text-color
-  background-color: $base-menu-bg-color
+  //color: $base-menu-text-color
+  //background-color: $base-menu-bg-color
   &:hover
-    background-color: $base-menu-hover-bg-color
+    //background-color: $base-menu-hover-bg-color
 </style>

@@ -2,8 +2,28 @@
 import { useLayoutSettingStore } from '@/stores/setting'
 import { useUserStore } from '@/stores/user.ts'
 import { useRoute, useRouter } from 'vue-router'
+import { ref } from 'vue'
+import { initTheme } from '@/initTheme.ts'
 const route = useRoute()
 const router = useRouter()
+
+const predefineColors = ref([
+  '#ff4500',
+  '#ff8c00',
+  '#ffd700',
+  '#90ee90',
+  '#00ced1',
+  '#1e90ff',
+  '#c71585',
+  'rgba(255, 69, 0, 0.68)',
+  'rgb(255, 120, 0)',
+  'hsv(51, 100, 98)',
+  'hsva(120, 40, 94, 0.5)',
+  'hsl(181, 100%, 37%)',
+  'hsla(209, 100%, 56%, 0.73)',
+  '#c7158577',
+])
+
 const layoutSettingStore = useLayoutSettingStore()
 const userStore = useUserStore()
 const handleCommand = async (command: string) => {
@@ -38,6 +58,15 @@ const handleFullScreen = () => {
     }
   }
 }
+
+const changeThemeColor = (val: string | null) => {
+  layoutSettingStore.themeColor = val!
+  initTheme()
+}
+const changeThemeMode = (val: boolean | string | number) => {
+  layoutSettingStore.isDark = val as boolean
+  initTheme()
+}
 </script>
 
 <template>
@@ -63,7 +92,27 @@ const handleFullScreen = () => {
       <div class="flex items-center">
         <el-button size="small" icon="Refresh" @click="handleRefresh" />
         <el-button size="small" icon="FullScreen" @click="handleFullScreen" />
-        <el-button size="small" icon="Setting" />
+        <el-popover placement="bottom" trigger="click">
+          <template #reference> <el-button size="small" icon="Setting" /> </template>
+          <div>
+            主题色:
+            <el-color-picker
+              :predefine="predefineColors"
+              v-model="layoutSettingStore.themeColor"
+              @change="changeThemeColor"
+            />
+          </div>
+          <div>
+            暗黑模式:
+            <el-switch
+              active-icon="Moon"
+              inactive-icon="Sunny"
+              inline-prompt
+              v-model="layoutSettingStore.isDark"
+              @change="changeThemeMode"
+            />
+          </div>
+        </el-popover>
         <el-avatar :src="userStore.userInfo.avatar" class="mr-2! ml-2!" />
         <el-dropdown @command="handleCommand">
           <span>

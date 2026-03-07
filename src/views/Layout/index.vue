@@ -68,21 +68,20 @@ watch(
 @use '@/styles/element/index.scss' as *
 .aside-nav
   height: 100vh
-  background-color: $base-menu-bg-color
-  color: $base-title-color
+  //background-color: $base-menu-bg-color
+  //color: $base-title-color
   transition: width .3s ease-out
 
 .scrollBar
   height: calc(100vh - $base-menu-logo-height)
 .menu-list
-  background-color: $base-menu-bg-color
-  color: $base-title-color
+  //color: $base-title-color
   border-right: none
 .el-menu
   border-right: none
 :deep(.is-active)
-  background-color: $base-menu-active-bg-color
-  color: $base-menu-active-text-color
+  //background-color: $base-menu-active-bg-color
+  //color: $base-menu-active-text-color
 :deep(.el-main)
   height: calc(100vh - 16px - 60px)
 :deep(.el-card__body)
