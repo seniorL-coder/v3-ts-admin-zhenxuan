@@ -19,6 +19,7 @@ export default defineConfigWithVueTs(
         console: 'readonly', // 允许使用 console
         process: 'readonly', // 允许使用 process
         ElMessage: 'readonly',
+        ElLoading: 'readonly',
         setTimeout: 'readonly',
         ElNotification: 'readonly',
         ElMessageBox: 'readonly',

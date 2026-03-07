@@ -153,6 +153,7 @@ const handleSubmit = () => {
           />
 
           <el-button
+            class="ml-2!"
             size="small"
             icon="Delete"
             type="danger"

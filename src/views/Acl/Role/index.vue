@@ -184,7 +184,9 @@ const defaultProps = {
           当前分配权限角色:
           <span class="ml-1! text-blue-500 font-bold">{{ assignRoleInfo.roleName }}</span>
         </div>
-        <el-button class="mr-8!" @click="getCheckedKeys" type="success">确认</el-button>
+        <el-button class="mr-8!" size="small" @click="getCheckedKeys" type="success"
+          >确认</el-button
+        >
       </template>
       <el-tree
         v-loading="loading"

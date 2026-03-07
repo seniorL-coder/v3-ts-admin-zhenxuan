@@ -17,6 +17,7 @@ import {
 } from '@/api/SPU'
 import type { ModelTrademark } from '@/types/trademark'
 import { fetchUploadImage } from '@/api/upload'
+import settings from '@/settings.ts'
 
 const skuFormTitle = ref('添加SPU')
 const spuName = ref('')
@@ -46,7 +47,7 @@ const rules: FormRules = {
   ],
   description: [
     { required: true, message: '请输入SPU描述', trigger: 'change' },
-    { min: 2, max: 200, message: '长度在 2 到 200 个字符', trigger: 'change' },
+    { min: 2, max: 300, message: '长度在 2 到 300 个字符', trigger: 'change' },
   ],
   // 品牌 ID：通常是数字或字符串，直接判断是否真值即可
   trademarkId: [
@@ -123,7 +124,7 @@ const getSPUImages = async (id: number) => {
   spuImages.value = data.map((item) => {
     return {
       name: item.imgName!,
-      url: item.imgUrl!.replace('/api', 'http://117.72.157.194:10086'),
+      url: item.imgUrl!.replace('/api', settings.imgPrefixUrl),
       uid: item.id!,
     }
   })

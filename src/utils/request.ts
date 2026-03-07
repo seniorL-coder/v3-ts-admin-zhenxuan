@@ -4,6 +4,7 @@ import { useUserStore } from '@/stores/user.ts'
 import { storeToRefs } from 'pinia'
 import router from '@/router'
 import Nprogress from 'nprogress'
+let loadingInstance: any = null
 
 export const request = axios.create({
   baseURL: import.meta.env.VITE_APP_BASE_API,
@@ -14,6 +15,11 @@ export const request = axios.create({
 request.interceptors.request.use(
   (config) => {
     Nprogress.start()
+    loadingInstance = ElLoading.service({
+      lock: true,
+      text: '加载中...',
+      background: 'rgba(0,0,0,0.2)',
+    })
     const { token } = storeToRefs(useUserStore())
     if (token.value) {
       config.headers.token = token.value
@@ -31,6 +37,7 @@ request.interceptors.response.use(
     const userStore = useUserStore()
     const response = res.data
     Nprogress.done()
+    loadingInstance?.close()
     switch (response.code) {
       case 200:
         // 请求成功
