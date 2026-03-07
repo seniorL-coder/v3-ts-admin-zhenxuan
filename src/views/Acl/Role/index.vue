@@ -9,7 +9,6 @@ import {
 } from '@/api/role'
 import UpdateAndAddRoleDialog from '@/types/user/components/UpdateAndAddRoleDialog.vue'
 import type { TreeInstance } from 'element-plus'
-import { fetchAssignRolesAPI } from '@/api/user'
 
 const loading = ref(true)
 const roleName = ref('')
