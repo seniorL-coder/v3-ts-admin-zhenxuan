@@ -84,6 +84,10 @@ const handleSelectionChange = async (selection: ModelResponseUser[]) => {
  * 批量删除用户
  */
 const handleBatchDeleteUser = async () => {
+  if (ids.value.length === 0) {
+    ElMessage.warning('请至少选择一个用户进行删除')
+    return
+  }
   await fetchBatchDeleteUserAPI(ids.value)
   // 边界判断，如果删除的是最后一页的数据, page - 1
   if (pagination.value.page === 1) pagination.value.page = 1
@@ -151,7 +155,7 @@ const handleReset = () => {
       <el-button type="primary" @click="handleAddUser">添加</el-button>
       <el-popconfirm title="确定要删除吗？" @confirm="handleBatchDeleteUser">
         <template #reference>
-          <el-button type="danger">批量删除</el-button>
+          <el-button type="danger" :disabled="!ids.length">批量删除</el-button>
         </template>
       </el-popconfirm>
     </div>

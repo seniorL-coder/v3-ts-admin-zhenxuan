@@ -16,7 +16,6 @@ const pagination = ref({
 })
 const getSpuListPageLimit = async (page: number, limit: number) => {
   const { data } = await fetchSkuIListPageLimit(page, limit)
-  console.log(data)
   skuListPage.value = data.records
   pagination.value.page = data.current!
   pagination.value.pageSize = data.size!
