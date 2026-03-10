@@ -4,16 +4,23 @@ import router from './index'
 import Nprogress from 'nprogress'
 import 'nprogress/nprogress.css'
 import Setting from '@/settings.ts'
-router.beforeEach((to) => {
+router.beforeEach(async (to) => {
   const userStore = useUserStore()
   document.title = `${Setting.title} - ${to.meta.title ?? ''}`
   Nprogress.start()
-
-  if (userStore.token) {
+  if (userStore.token && userStore.token !== '') {
     if (to.path === '/login') {
       return '/'
     }
-    return true
+    if (!userStore.isFetched) {
+      await userStore.getUserInfo()
+      return {
+        path: to.path,
+        query: to.query,
+        hash: to.hash,
+        replace: true,
+      }
+    }
   } else {
     if (to.path === '/login') {
       return true

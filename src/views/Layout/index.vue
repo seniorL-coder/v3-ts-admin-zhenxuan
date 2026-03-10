@@ -36,6 +36,7 @@ watch(
 
       <el-scrollbar class="scrollBar">
         <el-menu
+          router
           :default-openeds="[$route.matched[0]?.path || '/']"
           :collapse="layoutSettingStore.isCollapse"
           :default-active="$route.path"

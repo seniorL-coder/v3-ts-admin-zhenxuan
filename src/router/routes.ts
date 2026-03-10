@@ -25,6 +25,39 @@ export const constantRoutes: RouteRecordRaw[] = [
       },
     ],
   },
+
+  {
+    path: '/screen',
+    name: 'Screen',
+    component: () => import('@/views/Screen/index.vue'),
+    meta: {
+      title: '数据大屏',
+      icon: 'Monitor',
+      hidden: false,
+    },
+  },
+  {
+    path: '/login',
+    component: () => import('@/views/login/index.vue'),
+    name: 'login',
+    meta: {
+      title: '登录',
+      hidden: true,
+    },
+  },
+  {
+    path: '/404',
+    component: () => import('@/views/404/index.vue'),
+    name: '404',
+    meta: {
+      title: '404',
+      hidden: true,
+    },
+  },
+]
+
+// 需要动态加载的路由
+export const asyncRoutes = [
   {
     path: '/acl',
     name: 'Acl',
@@ -121,38 +154,14 @@ export const constantRoutes: RouteRecordRaw[] = [
       },
     ],
   },
-  {
-    path: '/screen',
-    name: 'Screen',
-    component: () => import('@/views/Screen/index.vue'),
-    meta: {
-      title: '数据大屏',
-      icon: 'Monitor',
-      hidden: false,
-    },
-  },
-  {
-    path: '/login',
-    component: () => import('@/views/login/index.vue'),
-    name: 'login',
-    meta: {
-      title: '登录',
-      hidden: true,
-    },
-  },
-  {
-    path: '/404',
-    component: () => import('@/views/404/index.vue'),
-    name: '404',
-    meta: {
-      title: '404',
-      hidden: true,
-    },
-  },
+]
+
+// 任意路由必须放在最下面
+export const anyRoutes = [
   {
     path: '/:pathMatch(.*)*',
     redirect: '/404',
-    name: 'CatchAll',
+    name: 'Any',
     meta: {
       title: 'pathMatch',
       hidden: true,

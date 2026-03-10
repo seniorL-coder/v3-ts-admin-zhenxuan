@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
+// import { useRouter } from 'vue-router'
 
 defineOptions({
   name: 'menu-component',
 })
 const { menuList } = defineProps(['menuList'])
-const router = useRouter()
-const goRoute = (name?: string) => {
-  if (!name) return
-  router.push({ name })
-}
+// const router = useRouter()
+// const goRoute = (name?: string) => {
+//   if (!name) return
+//   router.push({ name })
+// }
 </script>
 
 <template>
   <template v-for="item in menuList" :key="item.path">
     <template v-if="!item.children && !item.meta.hidden">
-      <el-menu-item :index="item.path" @click="goRoute(item.name)">
+      <el-menu-item :index="item.path">
         <el-icon><component :is="item.meta.icon" /></el-icon>
         <template #title>
           <span> {{ item.meta.title }}</span>
