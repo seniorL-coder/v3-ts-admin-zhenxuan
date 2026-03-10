@@ -1,10 +1,10 @@
 <script setup lang="ts">
+import { useLayoutSettingStore } from '@/stores/setting'
 import { useUserStore } from '@/stores/user.ts'
 import { getTimePeriod } from '@/utils/getTimePeriodUtlis.ts'
-import { watch } from 'vue'
-// import 'cesium/Build/Cesium/Widgets/widgets.css'
+import { watch, ref } from 'vue'
+const welcomeCardRef = ref()
 
-// import FlyCesium from '@/views/Home/components/flyCesium.vue'
 const userStore = useUserStore()
 watch(
   () => userStore.userInfo.name,
@@ -18,13 +18,36 @@ watch(
     })
   },
 )
+const layoutSettingStore = useLayoutSettingStore()
+watch(
+  () => layoutSettingStore.isDark,
+  () => {
+    if (layoutSettingStore.isDark) {
+      welcomeCardRef.value!.style.backgroundColor = 'rgba(0, 0, 0, 0.8)'
+      ElNotification({
+        title: '夜间模式',
+        message: '已切换到夜间模式，人们都说夜晚是创造力的源泉，希望你在夜间模式下有更多的灵感！',
+        type: 'success',
+        position: 'bottom-right',
+      })
+    } else {
+      welcomeCardRef.value!.style.backgroundColor = 'rgba(255, 255, 255, 0.6)'
+      ElNotification({
+        title: '日间模式',
+        message: '已切换到日间模式，祝你有个愉快的一天！',
+        type: 'success',
+        position: 'bottom-right',
+      })
+    }
+  },
+)
 </script>
 <template>
   <!-- 首页内容 -->
   <div class="home-main">
     <el-row class="welcome-row" justify="center" align="top">
       <el-col :span="12" class="welcome-column">
-        <div class="welcome-card">
+        <div class="welcome-card" ref="welcomeCardRef">
           <h2 class="welcome-title">欢迎回来，{{ userStore.userInfo.name }}！</h2>
           <p class="welcome-message">很高兴你访问系统！祝你操作愉快。</p>
           <p class="footer-message">如果需要帮助，请随时联系我们！</p>
@@ -37,7 +60,6 @@ watch(
 <style scoped lang="sass">
 .home-main
   padding: 50px
-  background-color: #f4f7fc
   width: 100%
   height: calc(100vh - 10em)
   background-image: url("@/assets/images/welcome.png")
@@ -50,7 +72,8 @@ watch(
   text-align: center
 
 .welcome-card
-  background-color: white
+  background-color: var(--el-bg-color-overlay)
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.2))
   padding: 40px
   border-radius: 10px
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1)
@@ -62,11 +85,9 @@ watch(
 
 .welcome-message
   font-size: 16px;
-  color: #606266;
   margin-bottom: 30px;
 
 .footer-message
   font-size: 14px;
-  color: #909399;
   margin-top: 20px;
 </style>
