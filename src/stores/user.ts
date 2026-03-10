@@ -64,7 +64,7 @@ export const useUserStore = defineStore(
       btnPermissions.value = []
       routesPermissions.value = []
       // 彻底清理：直接跳转并让浏览器刷新
-      window.location.href = '/login'
+      window.location.href = '/nova/login'
     }
 
     return {

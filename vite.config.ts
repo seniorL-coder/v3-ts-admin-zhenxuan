@@ -15,6 +15,7 @@ import ElementPlus from 'unplugin-element-plus/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
+  base: '/nova',
   plugins: [
     vue(),
 

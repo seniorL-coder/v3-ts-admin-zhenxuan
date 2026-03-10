@@ -12,7 +12,6 @@ const skuDetailInfo = ref<SkuInfo>({})
 // 获取sku详情
 const getSkuDetail = async () => {
   const { data } = await fetchSkuDetailInfo(+props.skuInfo.id!)
-  console.log(data, 'sku详情')
   skuDetailInfo.value = data
 }
 
