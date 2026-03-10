@@ -3,7 +3,7 @@ import { createApp } from 'vue'
 
 import App from './App.vue'
 import router from './router'
-
+import btnPermission from './directive/vBtnPermission.ts'
 import 'virtual:svg-icons-register' // svg 图标注册
 import GlobalComponentsPlugin from '@/plugins/GlobalComponentsPlugin.ts'
 // 暗黑模式
@@ -12,6 +12,8 @@ import { initTheme } from '@/initTheme.ts'
 import '@/router/promission'
 import pinia from './stores'
 const app = createApp(App)
+
+app.directive('btnPermission', btnPermission)
 
 app.use(pinia)
 app.use(router)

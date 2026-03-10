@@ -23,7 +23,6 @@ watch(
   () => layoutSettingStore.isDark,
   () => {
     if (layoutSettingStore.isDark) {
-      welcomeCardRef.value!.style.backgroundColor = 'rgba(0, 0, 0, 0.8)'
       ElNotification({
         title: '夜间模式',
         message: '已切换到夜间模式，人们都说夜晚是创造力的源泉，希望你在夜间模式下有更多的灵感！',
@@ -31,7 +30,6 @@ watch(
         position: 'bottom-right',
       })
     } else {
-      welcomeCardRef.value!.style.backgroundColor = 'rgba(255, 255, 255, 0.6)'
       ElNotification({
         title: '日间模式',
         message: '已切换到日间模式，祝你有个愉快的一天！',
@@ -72,22 +70,22 @@ watch(
   text-align: center
 
 .welcome-card
-  background-color: var(--el-bg-color-overlay)
+  background-color: rgb(from var(--el-bg-color-overlay) r g b / 0.6)
   filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.2))
   padding: 40px
   border-radius: 10px
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1)
 
 .welcome-title
-  font-size: 24px;
-  color: #409eff;
-  margin-bottom: 20px;
+  font-size: 24px
+  color: var(--el-color-primary)
+  margin-bottom: 20px
 
 .welcome-message
-  font-size: 16px;
-  margin-bottom: 30px;
+  font-size: 16px
+  margin-bottom: 30px
 
 .footer-message
-  font-size: 14px;
-  margin-top: 20px;
+  font-size: 14px
+  margin-top: 20px
 </style>

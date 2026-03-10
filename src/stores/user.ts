@@ -39,13 +39,32 @@ export const useUserStore = defineStore(
       })
       isFetched.value = true // 标记已 addRoute
     }
+    // 重点：重置路由的方法
+    const resetRouter = () => {
+      // 移除所有动态添加的路由
+      // 注意：如果你的动态路由有 name，可以通过 name 移除
+      router.getRoutes().forEach((route) => {
+        const { name } = route
+        // 如果该路由不在静态路由表中，且有 name，则删除它
+        if (name && !constantRoutes.find((r) => r.name === name)) {
+          router.removeRoute(name)
+        }
+      })
+    }
+
     // 删除token
     const logout = async () => {
       await fetchLogoutAPI()
+      // 清理 Pinia (这里要确保 isFetched 重置为 false)
       isFetched.value = false
+      resetRouter()
       token.value = ''
       userInfo.value = {}
-      menuRoutes.value = []
+      menuRoutes.value = constantRoutes
+      btnPermissions.value = []
+      routesPermissions.value = []
+      // 彻底清理：直接跳转并让浏览器刷新
+      window.location.href = '/login'
     }
 
     return {

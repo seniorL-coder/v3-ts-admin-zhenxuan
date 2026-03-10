@@ -152,7 +152,9 @@ const handleReset = () => {
       </el-form>
     </el-card>
     <div class="mt-6!">
-      <el-button type="primary" @click="handleAddUser">添加</el-button>
+      <el-button v-btn-permission="'btn.User.add'" type="primary" @click="handleAddUser"
+        >添加</el-button
+      >
       <el-popconfirm title="确定要删除吗？" @confirm="handleBatchDeleteUser">
         <template #reference>
           <el-button type="danger" :disabled="!ids.length">批量删除</el-button>
@@ -187,15 +189,31 @@ const handleReset = () => {
       <el-table-column align="center" label="修改时间" prop="updateTime" width="200" />
       <el-table-column fixed="right" label="操作" align="center" width="280">
         <template #default="{ row }">
-          <el-button type="primary" icon="User" size="small" @click="handleAssignRole(row)"
+          <el-button
+            v-btn-permission="'btn.User.assign'"
+            type="primary"
+            icon="User"
+            size="small"
+            @click="handleAssignRole(row)"
             >分配角色</el-button
           >
-          <el-button type="primary" icon="Edit" size="small" @click="handleUpdateUser(row)"
+          <el-button
+            v-btn-permission="'btn.User.update'"
+            type="primary"
+            icon="Edit"
+            size="small"
+            @click="handleUpdateUser(row)"
             >编辑</el-button
           >
           <el-popconfirm title="确定要删除吗？" @confirm="handleDeleteUser(row)">
             <template #reference>
-              <el-button type="danger" icon="Delete" size="small">删除</el-button>
+              <el-button
+                v-btn-permission="'btn.User.remove'"
+                type="danger"
+                icon="Delete"
+                size="small"
+                >删除</el-button
+              >
             </template>
           </el-popconfirm>
         </template>

@@ -1,11 +1,8 @@
 <script setup lang="ts">
 import { useLayoutSettingStore } from '@/stores/setting'
 import { useUserStore } from '@/stores/user.ts'
-import { useRoute, useRouter } from 'vue-router'
 import { ref } from 'vue'
 import { initTheme } from '@/initTheme.ts'
-const route = useRoute()
-const router = useRouter()
 
 const predefineColors = ref([
   '#ff4500',
@@ -34,8 +31,8 @@ const handleCommand = async (command: string) => {
       type: 'warning',
     })
     await userStore.logout()
-    const redirect = route.fullPath
-    await router.replace({ path: '/login', query: { redirect: redirect } })
+    // const redirect = route.fullPath
+    // await router.replace({ path: '/login', query: { redirect: redirect } })
     ElMessage.success('退出成功')
   }
 }

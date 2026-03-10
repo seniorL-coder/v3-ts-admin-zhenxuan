@@ -34,6 +34,7 @@ export default defineConfigWithVueTs(
         setInterval: 'readonly',
         clearInterval: 'readonly',
         clearTimeout: 'readonly',
+        HTMLElement: 'readonly',
       },
     },
   },

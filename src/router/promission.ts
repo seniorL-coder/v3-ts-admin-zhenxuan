@@ -21,6 +21,7 @@ router.beforeEach(async (to) => {
         replace: true,
       }
     }
+    return true
   } else {
     if (to.path === '/login') {
       return true

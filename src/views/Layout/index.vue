@@ -11,6 +11,7 @@ import { nextTick, ref, watch } from 'vue'
 const userStore = useUserStore()
 const getUserInfo = async () => {
   await userStore.getUserInfo()
+  console.log(userStore.menuRoutes)
 }
 getUserInfo()
 const layoutSettingStore = useLayoutSettingStore()

@@ -40,7 +40,7 @@ const onSubmit = async () => {
   await userStore.login(formData.value)
   ElMessage.success('登录成功!☺️')
   const redirect = route.query.redirect as string
-  setTimeout(() => router.replace({ path: redirect || '/' }), 200)
+  await router.replace({ path: redirect || '/' })
 }
 const onReset = () => {
   formEl.value?.resetFields()
@@ -114,7 +114,7 @@ const onReset = () => {
   width: 96.5%
   height: 94%
   padding: 0 50px
-  background-color: rgba(248, 248, 248, 0.8)
+  background-color: rgb(from var(--el-bg-color-overlay) r g b / 0.6)
   border-radius: 10px
 
 /* 进入前 & 离开后 */
