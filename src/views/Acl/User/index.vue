@@ -190,7 +190,7 @@ const handleReset = () => {
       <el-table-column fixed="right" label="操作" align="center" width="280">
         <template #default="{ row }">
           <el-button
-            v-btn-permission="'btn.User.assign'"
+            v-btn-permission="'btn.User.assgin'"
             type="primary"
             icon="User"
             size="small"
